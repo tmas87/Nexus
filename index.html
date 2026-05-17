@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nexus IT Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0b0d14; --surface:#12151f; --surface2:#1a1e2e; --surface3:#222740;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.12);
+  --accent:#4f8ef7; --accent2:#7c5cfc; --green:#22d3a0;
+  --orange:#f97316; --red:#f43f5e; --yellow:#fbbf24;
+  --text:#e8eaf2; --muted:#6b7280; --muted2:#9ca3af;
+  --syne:'Syne',sans-serif; --dm:'DM Sans',sans-serif;
+  --radius:12px; --radius-sm:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--dm);min-height:100vh;display:flex;overflow:hidden;font-size:14px;}
+
+/* ===== SIDEBAR ===== */
+.sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;height:100vh;position:fixed;left:0;top:0;z-index:100;overflow-y:auto;}
+.sidebar::-webkit-scrollbar{width:0;}
+.logo{padding:22px 18px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.logo-text{font-family:var(--syne);font-weight:800;font-size:18px;letter-spacing:-0.5px;}
+.logo-text span{color:var(--accent);}
+.nav-section{padding:14px 10px 6px;}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;padding:0 8px 7px;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:400;color:var(--muted);transition:all 0.15s;margin-bottom:1px;position:relative;user-select:none;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:linear-gradient(90deg,rgba(79,142,247,0.15),rgba(124,92,252,0.08));color:var(--accent);font-weight:500;}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--accent);border-radius:0 3px 3px 0;}
+.nav-item .icon{font-size:14px;width:18px;text-align:center;flex-shrink:0;}
+.badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;min-width:18px;text-align:center;}
+.badge.red{background:var(--red);color:#fff;}
+.badge.blue{background:var(--accent);color:#fff;}
+.badge.green{background:var(--green);color:#0b0d14;}
+.badge.orange{background:var(--orange);color:#fff;}
+.sidebar-footer{margin-top:auto;border-top:1px solid var(--border);padding:12px 10px;flex-shrink:0;}
+.user-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;}
+.user-row:hover{background:var(--surface2);}
+.avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:var(--syne);flex-shrink:0;}
+.user-name{font-size:12px;font-weight:500;}
+.user-role{font-size:10px;color:var(--muted);}
+
+/* ===== MAIN ===== */
+.main{margin-left:220px;flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 26px;height:56px;display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.topbar-title{font-family:var(--syne);font-size:17px;font-weight:700;flex:1;}
+.topbar-sub{font-size:12px;color:var(--muted);margin-left:8px;font-weight:400;font-family:var(--dm);}
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;width:240px;}
+.search-bar input{background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:var(--dm);width:100%;}
+.search-bar input::placeholder{color:var(--muted);}
+.btn{display:flex;align-items:center;gap:7px;padding:7px 15px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;font-family:var(--dm);transition:all 0.15s;white-space:nowrap;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
+.btn-primary:hover{opacity:0.88;transform:translateY(-1px);}
+.btn-ghost{background:var(--surface2);border:1px solid var(--border);color:var(--muted2);}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2);}
+.btn-danger{background:rgba(244,63,94,0.15);border:1px solid rgba(244,63,94,0.3);color:var(--red);}
+.icon-btn{width:34px;height:34px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative;transition:all 0.15s;}
+.icon-btn:hover{border-color:var(--border2);}
+.icon-btn .dot{position:absolute;top:6px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--red);border:2px solid var(--surface);}
+
+/* ===== CONTENT ===== */
+.content{flex:1;overflow-y:auto;padding:24px 26px;display:flex;flex-direction:column;gap:20px;}
+.content::-webkit-scrollbar{width:5px;}
+.content::-webkit-scrollbar-track{background:transparent;}
+.content::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
+
+/* PAGE visibility */
+.page{display:none;flex-direction:column;gap:20px;}
+.page.active{display:flex;}
+
+/* ===== CARDS ===== */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.card-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.card-title{font-family:var(--syne);font-size:13px;font-weight:700;}
+.card-action{font-size:12px;color:var(--accent);cursor:pointer;font-weight:500;white-space:nowrap;}
+.card-action:hover{text-decoration:underline;}
+.card-body{padding:16px 18px;}
+
+/* ===== GRID LAYOUTS ===== */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+.g-main{display:grid;grid-template-columns:1fr 320px;gap:18px;}
+.g-main-left{display:flex;flex-direction:column;gap:18px;}
+.g-main-right{display:flex;flex-direction:column;gap:18px;}
+
+/* ===== KPI CARDS ===== */
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px 14px;position:relative;overflow:hidden;transition:border-color 0.2s;}
+.kpi:hover{border-color:rgba(79,142,247,0.25);}
+.kpi::after{content:'';position:absolute;top:-30px;right:-30px;width:90px;height:90px;border-radius:50%;opacity:0.06;}
+.kpi.blue::after{background:var(--accent);}
+.kpi.green::after{background:var(--green);}
+.kpi.orange::after{background:var(--orange);}
+.kpi.red::after{background:var(--red);}
+.kpi.purple::after{background:var(--accent2);}
+.kpi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.kpi-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.kpi-icon.blue{background:rgba(79,142,247,0.15);}
+.kpi-icon.green{background:rgba(34,211,160,0.15);}
+.kpi-icon.orange{background:rgba(249,115,22,0.15);}
+.kpi-icon.red{background:rgba(244,63,94,0.15);}
+.kpi-icon.purple{background:rgba(124,92,252,0.15);}
+.kpi-trend{font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;}
+.kpi-trend.up{color:var(--green);background:rgba(34,211,160,0.12);}
+.kpi-trend.down{color:var(--red);background:rgba(244,63,94,0.12);}
+.kpi-trend.warn{color:var(--orange);background:rgba(249,115,22,0.12);}
+.kpi-val{font-family:var(--syne);font-size:26px;font-weight:800;line-height:1;margin-bottom:3px;}
+.kpi-label{font-size:11.5px;color:var(--muted);}
+
+/* ===== TABLES ===== */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.tbl td{padding:10px 12px;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle;}
+.tbl tbody tr{cursor:pointer;transition:background 0.1s;}
+.tbl tbody tr:last-child td{border-bottom:none;}
+.tbl tbody tr:hover td{background:var(--surface2);}
+
+/* ===== STATUS PILLS ===== */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;}
+.pill.open{background:rgba(79,142,247,0.15);color:var(--accent);}
+.pill.inprog{background:rgba(251,191,36,0.15);color:var(--yellow);}
+.pill.resolved{background:rgba(34,211,160,0.15);color:var(--green);}
+.pill.pending{background:rgba(107,114,128,0.15);color:var(--muted);}
+.pill.critical{background:rgba(244,63,94,0.15);color:var(--red);}
+.pill.high{background:rgba(249,115,22,0.15);color:var(--orange);}
+.pill.medium{background:rgba(251,191,36,0.15);color:var(--yellow);}
+.pill.low{background:rgba(34,211,160,0.15);color:var(--green);}
+.pill.online{background:rgba(34,211,160,0.15);color:var(--green);}
+.pill.offline{background:rgba(244,63,94,0.15);color:var(--red);}
+.pill.warning{background:rgba(249,115,22,0.15);color:var(--orange);}
+.pill.healthy{background:rgba(34,211,160,0.15);color:var(--green);}
+.pill.patched{background:rgba(79,142,247,0.15);color:var(--accent);}
+.pill.unpatched{background:rgba(244,63,94,0.15);color:var(--red);}
+.pill.active{background:rgba(34,211,160,0.15);color:var(--green);}
+.pill.inactive{background:rgba(107,114,128,0.15);color:var(--muted);}
+
+/* Priority dot */
+.pdot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;flex-shrink:0;}
+.pdot.critical{background:var(--red);box-shadow:0 0 5px var(--red);}
+.pdot.high{background:var(--orange);}
+.pdot.medium{background:var(--yellow);}
+.pdot.low{background:var(--green);}
+
+/* Mini avatar */
+.mav{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:var(--syne);flex-shrink:0;}
+
+/* ===== TAB STRIP ===== */
+.tab-strip{display:flex;gap:2px;padding:14px 18px 0;border-bottom:1px solid var(--border);}
+.tab{padding:7px 14px 10px;font-size:12.5px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;border-radius:6px 6px 0 0;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500;}
+.tab:hover:not(.active){color:var(--text);}
+
+/* ===== FORM ELEMENTS ===== */
+.form-row{display:flex;flex-direction:column;gap:5px;}
+.form-row label{font-size:12px;font-weight:500;color:var(--muted2);}
+.form-input,.form-select,.form-textarea{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:var(--dm);font-size:13px;outline:none;transition:border-color 0.15s;width:100%;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);}
+.form-select option{background:var(--surface2);}
+.form-textarea{resize:vertical;min-height:80px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* ===== MODAL ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:16px;width:560px;max-height:85vh;overflow-y:auto;animation:modalIn 0.2s ease;}
+.modal::-webkit-scrollbar{width:0;}
+.modal-header{padding:20px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:var(--syne);font-size:16px;font-weight:700;}
+.modal-close{font-size:20px;cursor:pointer;color:var(--muted);line-height:1;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:16px;}
+.modal-footer{padding:16px 22px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+@keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+/* ===== ALERT ITEMS ===== */
+.alert-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:10px;border-left:3px solid;}
+.alert-item.critical{background:rgba(244,63,94,0.08);border-color:var(--red);}
+.alert-item.warning{background:rgba(249,115,22,0.08);border-color:var(--orange);}
+.alert-item.info{background:rgba(79,142,247,0.08);border-color:var(--accent);}
+.alert-item.success{background:rgba(34,211,160,0.08);border-color:var(--green);}
+.alert-title{font-size:12.5px;font-weight:500;margin-bottom:2px;}
+.alert-sub{font-size:11.5px;color:var(--muted);}
+
+/* ===== PROGRESS BAR ===== */
+.pbar{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;}
+.pbar-fill{height:100%;border-radius:3px;transition:width 0.3s;}
+
+/* ===== HEALTH BAR ===== */
+.hbar{width:70px;height:5px;background:var(--surface3);border-radius:3px;overflow:hidden;}
+.hbar-fill{height:100%;border-radius:3px;}
+
+/* ===== ACTIVITY FEED ===== */
+.act-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.act-item:last-child{border-bottom:none;}
+.act-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.act-text{font-size:12.5px;line-height:1.5;}
+.act-time{font-size:11px;color:var(--muted);}
+
+/* ===== TICKET DETAIL PANEL ===== */
+.detail-panel{background:var(--surface2);border-left:1px solid var(--border);width:420px;min-width:420px;height:100%;overflow-y:auto;display:none;flex-direction:column;}
+.detail-panel.open{display:flex;}
+.detail-panel::-webkit-scrollbar{width:4px;}
+.detail-panel::-webkit-scrollbar-thumb{background:var(--surface3);}
+.dp-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.dp-body{padding:18px;flex:1;display:flex;flex-direction:column;gap:16px;}
+.dp-section{display:flex;flex-direction:column;gap:8px;}
+.dp-section-label{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.dp-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.dp-meta-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+.dp-meta-key{font-size:10.5px;color:var(--muted);margin-bottom:3px;}
+.dp-meta-val{font-size:13px;font-weight:500;}
+
+/* comment */
+.comment{display:flex;gap:10px;margin-bottom:12px;}
+.comment-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--syne);flex-shrink:0;}
+.comment-bubble{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 12px;flex:1;}
+.comment-name{font-size:11.5px;font-weight:600;margin-bottom:4px;}
+.comment-text{font-size:12.5px;line-height:1.6;color:var(--muted2);}
+.comment-time{font-size:10.5px;color:var(--muted);margin-top:4px;}
+
+/* ===== AGENT STATUS ===== */
+.agent-row2{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.agent-row2:last-child{border-bottom:none;}
+.ag-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:var(--syne);position:relative;flex-shrink:0;}
+.online-dot{position:absolute;bottom:0;right:0;width:9px;height:9px;border-radius:50%;border:2px solid var(--surface);}
+.online-dot.online{background:var(--green);}
+.online-dot.busy{background:var(--orange);}
+.online-dot.away{background:var(--muted);}
+
+/* ===== MONITORING ===== */
+.monitor-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;transition:border-color 0.2s;cursor:pointer;}
+.monitor-card:hover{border-color:rgba(79,142,247,0.3);}
+.monitor-card.alert{border-color:rgba(244,63,94,0.3);}
+.monitor-card.warn{border-color:rgba(249,115,22,0.3);}
+.mc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.mc-name{font-size:13px;font-weight:600;}
+.mc-sub{font-size:11px;color:var(--muted);}
+.mc-metric{font-family:var(--syne);font-size:22px;font-weight:800;margin-bottom:4px;}
+.mc-label{font-size:11px;color:var(--muted);}
+.sparkline{display:flex;align-items:flex-end;gap:2px;height:30px;margin-top:8px;}
+.sp-bar{flex:1;border-radius:2px 2px 0 0;min-width:4px;}
+
+/* ===== SECURITY ===== */
+.vuln-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.vuln-item:last-child{border-bottom:none;}
+.vuln-sev{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+
+/* ===== AUTOMATION ===== */
+.rule-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.rule-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+.rule-info{flex:1;}
+.rule-name{font-size:13px;font-weight:600;margin-bottom:3px;}
+.rule-desc{font-size:12px;color:var(--muted);}
+.toggle{width:36px;height:20px;background:var(--surface3);border-radius:20px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0;}
+.toggle.on{background:var(--accent);}
+.toggle::after{content:'';position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left 0.2s;}
+.toggle.on::after{left:19px;}
+
+/* ===== DONUT ===== */
+.donut-wrap{display:flex;align-items:center;gap:18px;}
+.legend-list{display:flex;flex-direction:column;gap:7px;flex:1;}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:12px;}
+.legend-dot{width:9px;height:9px;border-radius:3px;flex-shrink:0;}
+.legend-val{margin-left:auto;font-weight:700;font-size:12px;font-family:var(--syne);}
+
+/* ===== SLA ===== */
+.sla-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.sla-label{font-size:12px;width:80px;flex-shrink:0;}
+.sla-val{font-size:12px;font-weight:700;width:36px;text-align:right;font-family:var(--syne);}
+
+/* ===== CHAT WIDGET ===== */
+.chat-list{display:flex;flex-direction:column;}
+.chat-item{display:flex;align-items:flex-start;gap:10px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,0.04);cursor:pointer;transition:background 0.1s;}
+.chat-item:hover,.chat-item.active-chat{background:var(--surface2);}
+.chat-unread{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:6px;flex-shrink:0;}
+.chat-unread.none{background:transparent;}
+.chat-conv{flex:1;display:flex;flex-direction:column;}
+.chat-name{font-size:13px;font-weight:500;margin-bottom:2px;}
+.chat-preview{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;}
+.chat-time{font-size:10.5px;color:var(--muted);}
+
+/* ===== KB ===== */
+.kb-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;cursor:pointer;transition:border-color 0.15s;}
+.kb-card:hover{border-color:rgba(79,142,247,0.3);}
+.kb-cat{font-size:10px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.kb-title{font-size:13px;font-weight:600;margin-bottom:4px;}
+.kb-meta{font-size:11px;color:var(--muted);}
+
+/* ===== CLIENTS ===== */
+.client-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;transition:border-color 0.2s;cursor:pointer;}
+.client-card:hover{border-color:rgba(79,142,247,0.25);}
+.client-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px;}
+.client-name{font-size:14px;font-weight:700;font-family:var(--syne);margin-bottom:2px;}
+.client-type{font-size:11px;color:var(--muted);margin-bottom:10px;}
+.client-stats{display:flex;gap:14px;}
+.client-stat{display:flex;flex-direction:column;}
+.client-stat-val{font-size:16px;font-weight:800;font-family:var(--syne);}
+.client-stat-key{font-size:10px;color:var(--muted);}
+
+/* ===== REPORTS ===== */
+.report-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color 0.15s;}
+.report-card:hover{border-color:rgba(79,142,247,0.3);}
+.report-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+
+/* ===== SETTINGS ===== */
+.settings-nav{display:flex;flex-direction:column;gap:2px;}
+.settings-nav-item{padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.15s;}
+.settings-nav-item:hover{background:var(--surface2);color:var(--text);}
+.settings-nav-item.active{background:linear-gradient(90deg,rgba(79,142,247,0.15),transparent);color:var(--accent);font-weight:500;}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.page.active{animation:fadeUp 0.3s ease;}
+
+/* ===== SCROLLBAR global ===== */
+select{cursor:pointer;}
+</style>
+</head>
+<body>
+
+<!-- ==================== SIDEBAR ==================== -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <div class="logo-text">Ne<span>xu</span>s</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active" data-page="dashboard"><span class="icon">⊞</span> Dashboard</div>
+    <div class="nav-item" data-page="analytics"><span class="icon">📊</span> Analytics</div>
+    <div class="nav-item" data-page="alerts"><span class="icon">🔔</span> Alerts <span class="badge red">7</span></div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Help Desk</div>
+    <div class="nav-item" data-page="tickets"><span class="icon">🎫</span> Tickets <span class="badge red">24</span></div>
+    <div class="nav-item" data-page="my-queue"><span class="icon">📋</span> My Queue <span class="badge blue">8</span></div>
+    <div class="nav-item" data-page="live-chat"><span class="icon">💬</span> Live Chat <span class="badge orange">3</span></div>
+    <div class="nav-item" data-page="knowledge-base"><span class="icon">📚</span> Knowledge Base</div>
+    <div class="nav-item" data-page="ai-assist"><span class="icon">🤖</span> AI Assist</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">IT Management</div>
+    <div class="nav-item" data-page="assets"><span class="icon">💻</span> Assets <span class="badge orange">3</span></div>
+    <div class="nav-item" data-page="security"><span class="icon">🛡️</span> Security</div>
+    <div class="nav-item" data-page="patch"><span class="icon">🔄</span> Patch Management</div>
+    <div class="nav-item" data-page="monitoring"><span class="icon">📡</span> Monitoring</div>
+    <div class="nav-item" data-page="automation"><span class="icon">⚙️</span> Automation</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Organization</div>
+    <div class="nav-item" data-page="clients"><span class="icon">👥</span> Clients</div>
+    <div class="nav-item" data-page="departments"><span class="icon">🏢</span> Departments</div>
+    <div class="nav-item" data-page="reports"><span class="icon">📝</span> Reports</div>
+    <div class="nav-item" data-page="settings"><span class="icon">🔧</span> Settings</div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-row">
+      <div class="avatar">SA</div>
+      <div style="flex:1">
+        <div class="user-name">Sarah Admin</div>
+        <div class="user-role">Super Admin</div>
+      </div>
+      <span style="color:var(--muted);font-size:13px;">⋯</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ==================== MAIN ==================== -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">Command Center</div>
+    <div class="search-bar">
+      <span style="color:var(--muted);font-size:13px;">🔍</span>
+      <input placeholder="Search tickets, assets, users…"/>
+      <span style="color:var(--muted);font-size:11px;background:var(--surface3);padding:1px 5px;border-radius:4px;">⌘K</span>
+    </div>
+    <div class="icon-btn">🔔<div class="dot"></div></div>
+    <div class="icon-btn">❓</div>
+    <button class="btn btn-primary" onclick="openModal('new-ticket-modal')">+ New Ticket</button>
+  </div>
+
+  <div class="content">
+
+<!-- ==================== DASHBOARD ==================== -->
+<div class="page active" id="page-dashboard">
+  <div class="g5">
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">🎫</div><div class="kpi-trend up">↑12%</div></div><div class="kpi-val">247</div><div class="kpi-label">Open Tickets</div></div>
+    <div class="kpi red"><div class="kpi-top"><div class="kpi-icon red">🔥</div><div class="kpi-trend down">↑3</div></div><div class="kpi-val">14</div><div class="kpi-label">Critical Issues</div></div>
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">💻</div><div class="kpi-trend up">↑8%</div></div><div class="kpi-val">1,834</div><div class="kpi-label">Managed Assets</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">⏱️</div><div class="kpi-trend up">↓4m</div></div><div class="kpi-val">2.4h</div><div class="kpi-label">Avg Response</div></div>
+    <div class="kpi purple"><div class="kpi-top"><div class="kpi-icon purple">😊</div><div class="kpi-trend up">↑2%</div></div><div class="kpi-val">96.2%</div><div class="kpi-label">CSAT Score</div></div>
+  </div>
+
+  <div class="g-main">
+    <div class="g-main-left">
+      <div class="card">
+        <div class="tab-strip">
+          <div class="tab active">All Tickets</div>
+          <div class="tab">Unassigned</div>
+          <div class="tab">My Queue</div>
+          <div class="tab">Escalated</div>
+        </div>
+        <table class="tbl">
+          <thead><tr><th>ID</th><th>Subject</th><th>Priority</th><th>Status</th><th>Agent</th><th>SLA</th></tr></thead>
+          <tbody>
+            <tr onclick="showTicketDetail(1)"><td style="color:var(--muted);font-size:12px">#4821</td><td><div style="font-weight:500">VPN not connecting — remote users</div><div style="font-size:11px;color:var(--muted)">Acme Corp · 2h ago</div></td><td><span class="pdot critical"></span>Critical</td><td><span class="pill inprog">In Progress</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)"><span class="mav" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc)">JD</span>J. Davis</span></td><td style="color:var(--red);font-size:12px;font-weight:600">48m left</td></tr>
+            <tr onclick="showTicketDetail(2)"><td style="color:var(--muted);font-size:12px">#4820</td><td><div style="font-weight:500">Outlook sync failing for 12 users</div><div style="font-size:11px;color:var(--muted)">TechStart Inc · 3h ago</div></td><td><span class="pdot high"></span>High</td><td><span class="pill open">Open</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)"><span class="mav" style="background:linear-gradient(135deg,#22d3a0,#4f8ef7)">MK</span>M. Kim</span></td><td style="color:var(--yellow);font-size:12px;font-weight:600">2h 14m</td></tr>
+            <tr onclick="showTicketDetail(3)"><td style="color:var(--muted);font-size:12px">#4819</td><td><div style="font-weight:500">Patch deployment failed — 6 endpoints</div><div style="font-size:11px;color:var(--muted)">Global Retail · 4h ago</div></td><td><span class="pdot high"></span>High</td><td><span class="pill inprog">In Progress</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)"><span class="mav" style="background:linear-gradient(135deg,#f97316,#fbbf24)">RL</span>R. Lee</span></td><td style="color:var(--green);font-size:12px;font-weight:600">5h 30m</td></tr>
+            <tr onclick="showTicketDetail(4)"><td style="color:var(--muted);font-size:12px">#4818</td><td><div style="font-weight:500">New hire laptop provisioning</div><div style="font-size:11px;color:var(--muted)">Nexus Internal · 5h ago</div></td><td><span class="pdot medium"></span>Medium</td><td><span class="pill pending">Pending</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)"><span class="mav" style="background:linear-gradient(135deg,#f43f5e,#7c5cfc)">AP</span>A. Patel</span></td><td style="color:var(--muted);font-size:12px;font-weight:600">1d 2h</td></tr>
+            <tr onclick="showTicketDetail(5)"><td style="color:var(--muted);font-size:12px">#4817</td><td><div style="font-weight:500">Printer offline — Floor 3</div><div style="font-size:11px;color:var(--muted)">Finance · 6h ago</div></td><td><span class="pdot low"></span>Low</td><td><span class="pill resolved">Resolved</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)"><span class="mav" style="background:linear-gradient(135deg,#22d3a0,#fbbf24)">JD</span>J. Davis</span></td><td style="color:var(--green);font-size:12px;font-weight:600">Done ✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="g3">
+        <!-- Ticket breakdown -->
+        <div class="card"><div class="card-header"><div class="card-title">Ticket Types</div></div><div class="card-body"><div class="donut-wrap"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="#222740" stroke-width="10"/><circle cx="40" cy="40" r="30" fill="none" stroke="#4f8ef7" stroke-width="10" stroke-dasharray="71 188" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 40 40)"/><circle cx="40" cy="40" r="30" fill="none" stroke="#7c5cfc" stroke-width="10" stroke-dasharray="53 188" stroke-dashoffset="-71" stroke-linecap="round" transform="rotate(-90 40 40)"/><circle cx="40" cy="40" r="30" fill="none" stroke="#22d3a0" stroke-width="10" stroke-dasharray="40 188" stroke-dashoffset="-124" stroke-linecap="round" transform="rotate(-90 40 40)"/><text x="40" y="44" text-anchor="middle" fill="#e8eaf2" font-size="12" font-weight="800" font-family="Syne,sans-serif">247</text></svg><div class="legend-list"><div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Open<div class="legend-val" style="color:var(--accent)">94</div></div><div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>In Prog<div class="legend-val" style="color:var(--accent2)">69</div></div><div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Done<div class="legend-val" style="color:var(--green)">54</div></div></div></div></div></div>
+        <!-- SLA -->
+        <div class="card"><div class="card-header"><div class="card-title">SLA Compliance</div></div><div class="card-body"><div class="sla-row"><div class="sla-label">Critical</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:78%;background:var(--orange)"></div></div><div class="sla-val" style="color:var(--orange)">78%</div></div><div class="sla-row"><div class="sla-label">High</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:88%;background:var(--yellow)"></div></div><div class="sla-val" style="color:var(--yellow)">88%</div></div><div class="sla-row"><div class="sla-label">Medium</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:96%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">96%</div></div><div class="sla-row" style="margin-bottom:0"><div class="sla-label">Low</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:99%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">99%</div></div></div></div>
+        <!-- Patch status -->
+        <div class="card"><div class="card-header"><div class="card-title">Patch Status</div><div class="card-action" onclick="navigate('patch')">Manage →</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:10px"><div style="display:flex;align-items:center;gap:10px"><div class="pbar" style="flex:1"><div class="pbar-fill" style="width:72%;background:var(--green)"></div></div><span style="font-size:12px;color:var(--green);font-weight:600;width:70px">1,321 OK</span></div><div style="display:flex;align-items:center;gap:10px"><div class="pbar" style="flex:1"><div class="pbar-fill" style="width:15%;background:var(--yellow)"></div></div><span style="font-size:12px;color:var(--yellow);font-weight:600;width:70px">274 Pending</span></div><div style="display:flex;align-items:center;gap:10px"><div class="pbar" style="flex:1"><div class="pbar-fill" style="width:3%;background:var(--red)"></div></div><span style="font-size:12px;color:var(--red);font-weight:600;width:70px">6 Failed</span></div><div style="margin-top:4px;font-size:11px;color:var(--muted)">Next run: Tonight 11:00 PM</div></div></div>
+      </div>
+    </div>
+
+    <div class="g-main-right">
+      <!-- Active Alerts -->
+      <div class="card"><div class="card-header"><div class="card-title">Active Alerts</div><div class="card-action" onclick="navigate('alerts')">View all</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+        <div class="alert-item critical"><span style="font-size:14px">🔴</span><div><div class="alert-title">PROD-DB-01 CPU Critical</div><div class="alert-sub">94% utilization</div></div><div style="font-size:10px;color:var(--muted);margin-left:auto">Now</div></div>
+        <div class="alert-item warning"><span style="font-size:14px">🟠</span><div><div class="alert-title">Patch failure — 6 endpoints</div><div class="alert-sub">KB5040529 rollback needed</div></div><div style="font-size:10px;color:var(--muted);margin-left:auto">1h</div></div>
+        <div class="alert-item critical"><span style="font-size:14px">🔴</span><div><div class="alert-title">SLA Breach — #4816</div><div class="alert-sub">MFA issue unassigned</div></div><div style="font-size:10px;color:var(--muted);margin-left:auto">32m</div></div>
+        <div class="alert-item info"><span style="font-size:14px">🔵</span><div><div class="alert-title">SSL cert expiring</div><div class="alert-sub">portal.acme — 14 days</div></div><div style="font-size:10px;color:var(--muted);margin-left:auto">3h</div></div>
+      </div></div>
+      <!-- Agent Status -->
+      <div class="card"><div class="card-header"><div class="card-title">Agent Status</div><span style="font-size:11px;color:var(--green);font-weight:600">● 6 online</span></div><div class="card-body" style="padding-top:6px;padding-bottom:6px">
+        <div class="agent-row2"><div class="ag-av" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc)">JD<div class="online-dot online"></div></div><div style="flex:1"><div style="font-size:12.5px;font-weight:500">James Davis</div><div style="font-size:11px;color:var(--muted)">Senior Agent</div></div><div style="font-size:12px;font-weight:600;font-family:var(--syne);color:var(--accent)">5 tickets</div></div>
+        <div class="agent-row2"><div class="ag-av" style="background:linear-gradient(135deg,#22d3a0,#4f8ef7)">MK<div class="online-dot online"></div></div><div style="flex:1"><div style="font-size:12.5px;font-weight:500">Mia Kim</div><div style="font-size:11px;color:var(--muted)">IT Specialist</div></div><div style="font-size:12px;font-weight:600;font-family:var(--syne);color:var(--accent)">3 tickets</div></div>
+        <div class="agent-row2"><div class="ag-av" style="background:linear-gradient(135deg,#f97316,#fbbf24)">RL<div class="online-dot busy"></div></div><div style="flex:1"><div style="font-size:12.5px;font-weight:500">Ryan Lee</div><div style="font-size:11px;color:var(--muted)">Sys Admin</div></div><div style="font-size:12px;font-weight:600;font-family:var(--syne);color:var(--accent)">7 tickets</div></div>
+        <div class="agent-row2"><div class="ag-av" style="background:linear-gradient(135deg,#f43f5e,#7c5cfc)">AP<div class="online-dot away"></div></div><div style="flex:1"><div style="font-size:12.5px;font-weight:500">Aisha Patel</div><div style="font-size:11px;color:var(--muted)">Help Desk</div></div><div style="font-size:12px;font-weight:600;font-family:var(--syne);color:var(--accent)">2 tickets</div></div>
+      </div></div>
+      <!-- Live Feed -->
+      <div class="card"><div class="card-header"><div class="card-title">Live Activity</div></div><div class="card-body" style="padding-top:4px;padding-bottom:4px">
+        <div class="act-item"><div class="act-icon" style="background:rgba(244,63,94,0.15)">🚨</div><div><div class="act-text"><strong>Critical alert</strong> — PROD-DB-01 CPU 94%</div><div class="act-time">Just now</div></div></div>
+        <div class="act-item"><div class="act-icon" style="background:rgba(34,211,160,0.15)">✅</div><div><div class="act-text"><strong>#4817</strong> resolved by J. Davis</div><div class="act-time">4 min ago</div></div></div>
+        <div class="act-item"><div class="act-icon" style="background:rgba(79,142,247,0.15)">💻</div><div><div class="act-text"><strong>15 endpoints</strong> patched — KB5040529</div><div class="act-time">18 min ago</div></div></div>
+        <div class="act-item"><div class="act-icon" style="background:rgba(124,92,252,0.15)">🔒</div><div><div class="act-text"><strong>Security scan</strong> — 3 vulns found</div><div class="act-time">1h ago</div></div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TICKETS ==================== -->
+<div class="page" id="page-tickets">
+  <div class="g4">
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">📬</div><div class="kpi-trend up">+12</div></div><div class="kpi-val">247</div><div class="kpi-label">Total Open</div></div>
+    <div class="kpi red"><div class="kpi-top"><div class="kpi-icon red">⚡</div></div><div class="kpi-val">14</div><div class="kpi-label">Critical</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">⏳</div></div><div class="kpi-val">6</div><div class="kpi-label">SLA Breached</div></div>
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">✅</div></div><div class="kpi-val">284</div><div class="kpi-label">Resolved Today</div></div>
+  </div>
+
+  <div style="display:flex;gap:18px;flex:1">
+    <div style="flex:1;display:flex;flex-direction:column;gap:0">
+      <div class="card" style="flex:1">
+        <div class="card-header">
+          <div style="display:flex;align-items:center;gap:10px;flex:1">
+            <div class="card-title">All Tickets</div>
+            <select class="form-select" style="width:120px;padding:5px 8px;font-size:12px"><option>All Priorities</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
+            <select class="form-select" style="width:110px;padding:5px 8px;font-size:12px"><option>All Status</option><option>Open</option><option>In Progress</option><option>Resolved</option><option>Pending</option></select>
+          </div>
+          <button class="btn btn-primary" style="font-size:12px;padding:6px 12px" onclick="openModal('new-ticket-modal')">+ New Ticket</button>
+        </div>
+        <table class="tbl">
+          <thead><tr><th><input type="checkbox" style="accent-color:var(--accent)"/></th><th>ID</th><th>Subject</th><th>Client</th><th>Priority</th><th>Status</th><th>Agent</th><th>Created</th><th>SLA</th><th></th></tr></thead>
+          <tbody id="ticket-table-body">
+            <tr onclick="showTicketDetail(1)"><td><input type="checkbox" style="accent-color:var(--accent)" onclick="event.stopPropagation()"/></td><td style="color:var(--muted);font-size:12px">#4821</td><td><div style="font-weight:500;font-size:13px">VPN not connecting — remote users</div></td><td style="font-size:12px;color:var(--muted)">Acme Corp</td><td><span class="pdot critical"></span>Critical</td><td><span class="pill inprog">In Progress</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px"><span class="mav" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc)">JD</span>J. Davis</span></td><td style="font-size:12px;color:var(--muted)">2h ago</td><td style="color:var(--red);font-size:12px;font-weight:600">48m</td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="event.stopPropagation()">···</button></td></tr>
+            <tr onclick="showTicketDetail(2)"><td><input type="checkbox" style="accent-color:var(--accent)" onclick="event.stopPropagation()"/></td><td style="color:var(--muted);font-size:12px">#4820</td><td><div style="font-weight:500;font-size:13px">Outlook sync failing for 12 users</div></td><td style="font-size:12px;color:var(--muted)">TechStart Inc</td><td><span class="pdot high"></span>High</td><td><span class="pill open">Open</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px"><span class="mav" style="background:linear-gradient(135deg,#22d3a0,#4f8ef7)">MK</span>M. Kim</span></td><td style="font-size:12px;color:var(--muted)">3h ago</td><td style="color:var(--yellow);font-size:12px;font-weight:600">2h 14m</td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="event.stopPropagation()">···</button></td></tr>
+            <tr onclick="showTicketDetail(3)"><td><input type="checkbox" style="accent-color:var(--accent)" onclick="event.stopPropagation()"/></td><td style="color:var(--muted);font-size:12px">#4819</td><td><div style="font-weight:500;font-size:13px">Patch deployment failed — 6 endpoints</div></td><td style="font-size:12px;color:var(--muted)">Global Retail</td><td><span class="pdot high"></span>High</td><td><span class="pill inprog">In Progress</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px"><span class="mav" style="background:linear-gradient(135deg,#f97316,#fbbf24)">RL</span>R. Lee</span></td><td style="font-size:12px;color:var(--muted)">4h ago</td><td style="color:var(--green);font-size:12px;font-weight:600">5h 30m</td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="event.stopPropagation()">···</button></td></tr>
+            <tr onclick="showTicketDetail(4)"><td><input type="checkbox" style="accent-color:var(--accent)" onclick="event.stopPropagation()"/></td><td style="color:var(--muted);font-size:12px">#4818</td><td><div style="font-weight:500;font-size:13px">New hire laptop provisioning</div></td><td style="font-size:12px;color:var(--muted)">Nexus Internal</td><td><span class="pdot medium"></span>Medium</td><td><span class="pill pending">Pending</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px"><span class="mav" style="background:linear-gradient(135deg,#f43f5e,#7c5cfc)">AP</span>A. Patel</span></td><td style="font-size:12px;color:var(--muted)">5h ago</td><td style="color:var(--muted);font-size:12px;font-weight:600">1d 2h</td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="event.stopPropagation()">···</button></td></tr>
+            <tr onclick="showTicketDetail(5)"><td><input type="checkbox" style="accent-color:var(--accent)" onclick="event.stopPropagation()"/></td><td style="color:var(--muted);font-size:12px">#4817</td><td><div style="font-weight:500;font-size:13px">Printer offline — Floor 3</div></td><td style="font-size:12px;color:var(--muted)">Finance Dept</td><td><span class="pdot low"></span>Low</td><td><span class="pill resolved">Resolved</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px"><span class="mav" style="background:linear-gradient(135deg,#22d3a0,#fbbf24)">JD</span>J. Davis</span></td><td style="font-size:12px;color:var(--muted)">6h ago</td><td style="color:var(--green);font-size:12px;font-weight:600">Done ✓</td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="event.stopPropagation()">···</button></td></tr>
+            <tr onclick="showTicketDetail(6)"><td><input type="checkbox" style="accent-color:var(--accent)" onclick="event.stopPropagation()"/></td><td style="color:var(--muted);font-size:12px">#4816</td><td><div style="font-weight:500;font-size:13px">MFA enrollment not completing</div></td><td style="font-size:12px;color:var(--muted)">SecureBank Ltd</td><td><span class="pdot high"></span>High</td><td><span class="pill open">Open</span></td><td style="color:var(--red);font-size:12px">Unassigned</td><td style="font-size:12px;color:var(--muted)">7h ago</td><td style="color:var(--red);font-size:12px;font-weight:600">Breached</td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px" onclick="event.stopPropagation()">···</button></td></tr>
+            <tr><td><input type="checkbox" style="accent-color:var(--accent)" onclick="event.stopPropagation()"/></td><td style="color:var(--muted);font-size:12px">#4815</td><td><div style="font-weight:500;font-size:13px">Password reset — CEO account locked</div></td><td style="font-size:12px;color:var(--muted)">Acme Corp</td><td><span class="pdot critical"></span>Critical</td><td><span class="pill resolved">Resolved</span></td><td><span style="display:flex;align-items:center;gap:5px;font-size:12px"><span class="mav" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc)">JD</span>J. Davis</span></td><td style="font-size:12px;color:var(--muted)">8h ago</td><td style="color:var(--green);font-size:12px;font-weight:600">Done ✓</td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px">···</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Ticket Detail Panel -->
+    <div class="detail-panel" id="ticket-detail">
+      <div class="dp-header">
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px">#4821 · VPN Issue</div>
+          <div style="display:flex;gap:8px;align-items:center"><span class="pill critical">Critical</span><span class="pill inprog">In Progress</span></div>
+        </div>
+        <button class="icon-btn" onclick="closeTicketDetail()" style="font-size:16px">✕</button>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-section-label">Subject</div>
+          <div style="font-size:14px;font-weight:600">VPN not connecting — remote users</div>
+        </div>
+        <div class="dp-meta-grid">
+          <div class="dp-meta-item"><div class="dp-meta-key">Client</div><div class="dp-meta-val">Acme Corp</div></div>
+          <div class="dp-meta-item"><div class="dp-meta-key">Created</div><div class="dp-meta-val">2h ago</div></div>
+          <div class="dp-meta-item"><div class="dp-meta-key">Assigned to</div><div class="dp-meta-val" style="display:flex;align-items:center;gap:5px"><span class="mav" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc)">JD</span>James Davis</div></div>
+          <div class="dp-meta-item"><div class="dp-meta-key">SLA</div><div class="dp-meta-val" style="color:var(--red)">48 min left</div></div>
+          <div class="dp-meta-item"><div class="dp-meta-key">Department</div><div class="dp-meta-val">Networking</div></div>
+          <div class="dp-meta-item"><div class="dp-meta-key">Source</div><div class="dp-meta-val">Email</div></div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-section-label">Description</div>
+          <div style="font-size:13px;color:var(--muted2);line-height:1.6">Remote employees cannot connect to the corporate VPN since 09:15 this morning. Approximately 34 users affected across the APAC and EMEA offices. Error: "Authentication failed - server timeout".</div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-section-label">Activity</div>
+          <div class="comment"><div class="comment-av" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc)">JD</div><div class="comment-bubble"><div class="comment-name">James Davis</div><div class="comment-text">Identified issue with RADIUS server. Restarting authentication service. Will update in 15 min.</div><div class="comment-time">1h 20m ago</div></div></div>
+          <div class="comment"><div class="comment-av" style="background:linear-gradient(135deg,#f43f5e,#7c5cfc)">SA</div><div class="comment-bubble"><div class="comment-name">Sarah Admin</div><div class="comment-text">Escalated to critical. Please keep users informed via status page.</div><div class="comment-time">1h 45m ago</div></div></div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-section-label">Reply</div>
+          <textarea class="form-textarea" placeholder="Type your response…" style="min-height:70px"></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="btn btn-primary" style="font-size:12px">Send Reply</button>
+            <button class="btn btn-ghost" style="font-size:12px">Internal Note</button>
+            <button class="btn btn-ghost" style="font-size:12px;margin-left:auto">Resolve ✓</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MY QUEUE ==================== -->
+<div class="page" id="page-my-queue">
+  <div class="g4">
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">📬</div></div><div class="kpi-val">8</div><div class="kpi-label">My Open Tickets</div></div>
+    <div class="kpi red"><div class="kpi-top"><div class="kpi-icon red">⚠️</div></div><div class="kpi-val">2</div><div class="kpi-label">SLA at Risk</div></div>
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">✅</div></div><div class="kpi-val">11</div><div class="kpi-label">Resolved Today</div></div>
+    <div class="kpi purple"><div class="kpi-top"><div class="kpi-icon purple">⏱️</div></div><div class="kpi-val">1.8h</div><div class="kpi-label">Avg Handle Time</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">My Queue — James Davis</div><button class="btn btn-ghost" style="font-size:12px">Sort by SLA</button></div>
+    <table class="tbl">
+      <thead><tr><th>ID</th><th>Subject</th><th>Priority</th><th>Status</th><th>Client</th><th>SLA</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--muted);font-size:12px">#4821</td><td><div style="font-weight:500">VPN not connecting — remote users</div></td><td><span class="pdot critical"></span>Critical</td><td><span class="pill inprog">In Progress</span></td><td style="font-size:12px;color:var(--muted)">Acme Corp</td><td style="color:var(--red);font-weight:600;font-size:12px">48m left</td><td><button class="btn btn-primary" style="font-size:11px;padding:5px 10px">Continue</button></td></tr>
+        <tr><td style="color:var(--muted);font-size:12px">#4815</td><td><div style="font-weight:500">Password reset — CEO account locked</div></td><td><span class="pdot critical"></span>Critical</td><td><span class="pill resolved">Resolved</span></td><td style="font-size:12px;color:var(--muted)">Acme Corp</td><td style="color:var(--green);font-weight:600;font-size:12px">Done ✓</td><td><button class="btn btn-ghost" style="font-size:11px;padding:5px 10px">Close</button></td></tr>
+        <tr><td style="color:var(--muted);font-size:12px">#4811</td><td><div style="font-weight:500">Office 365 license assignment</div></td><td><span class="pdot medium"></span>Medium</td><td><span class="pill open">Open</span></td><td style="font-size:12px;color:var(--muted)">TechStart</td><td style="color:var(--green);font-weight:600;font-size:12px">6h left</td><td><button class="btn btn-ghost" style="font-size:11px;padding:5px 10px">Open</button></td></tr>
+        <tr><td style="color:var(--muted);font-size:12px">#4808</td><td><div style="font-weight:500">Printer driver update required</div></td><td><span class="pdot low"></span>Low</td><td><span class="pill pending">Pending</span></td><td style="font-size:12px;color:var(--muted)">Finance Dept</td><td style="color:var(--muted);font-weight:600;font-size:12px">2d left</td><td><button class="btn btn-ghost" style="font-size:11px;padding:5px 10px">Open</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== LIVE CHAT ==================== -->
+<div class="page" id="page-live-chat">
+  <div style="display:flex;height:calc(100vh - 120px);gap:0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+    <!-- Chat list -->
+    <div style="width:260px;border-right:1px solid var(--border);display:flex;flex-direction:column">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+        <div style="font-family:var(--syne);font-size:13px;font-weight:700">Live Chats</div>
+        <span style="font-size:11px;background:var(--orange);color:#fff;padding:2px 7px;border-radius:20px;font-weight:700">3 active</span>
+      </div>
+      <div class="chat-list" style="flex:1;overflow-y:auto">
+        <div class="chat-item active-chat">
+          <div class="chat-unread"></div>
+          <div class="ag-av" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc);width:34px;height:34px;font-size:12px;flex-shrink:0">TC</div>
+          <div class="chat-conv">
+            <div style="display:flex;justify-content:space-between"><div class="chat-name">Tom Chen</div><div class="chat-time">Now</div></div>
+            <div class="chat-preview">Can't access my email since...</div>
+            <span class="pill open" style="font-size:10px;padding:2px 6px;margin-top:4px">Active</span>
+          </div>
+        </div>
+        <div class="chat-item">
+          <div class="chat-unread"></div>
+          <div class="ag-av" style="background:linear-gradient(135deg,#f97316,#fbbf24);width:34px;height:34px;font-size:12px;flex-shrink:0">LM</div>
+          <div class="chat-conv">
+            <div style="display:flex;justify-content:space-between"><div class="chat-name">Lisa Martinez</div><div class="chat-time">2m</div></div>
+            <div class="chat-preview">Software installation help needed</div>
+            <span class="pill inprog" style="font-size:10px;padding:2px 6px;margin-top:4px">Active</span>
+          </div>
+        </div>
+        <div class="chat-item">
+          <div class="chat-unread none"></div>
+          <div class="ag-av" style="background:linear-gradient(135deg,#22d3a0,#4f8ef7);width:34px;height:34px;font-size:12px;flex-shrink:0">RK</div>
+          <div class="chat-conv">
+            <div style="display:flex;justify-content:space-between"><div class="chat-name">Raj Kumar</div><div class="chat-time">8m</div></div>
+            <div class="chat-preview">VPN issue resolved, thank you!</div>
+            <span class="pill resolved" style="font-size:10px;padding:2px 6px;margin-top:4px">Resolved</span>
+          </div>
+        </div>
+        <div class="chat-item">
+          <div class="chat-unread none"></div>
+          <div class="ag-av" style="background:linear-gradient(135deg,#f43f5e,#7c5cfc);width:34px;height:34px;font-size:12px;flex-shrink:0">AF</div>
+          <div class="chat-conv">
+            <div style="display:flex;justify-content:space-between"><div class="chat-name">Amy Foster</div><div class="chat-time">20m</div></div>
+            <div class="chat-preview">Password reset done, all good</div>
+            <span class="pill resolved" style="font-size:10px;padding:2px 6px;margin-top:4px">Resolved</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Chat window -->
+    <div style="flex:1;display:flex;flex-direction:column">
+      <div style="padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px">
+        <div class="ag-av" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc);width:34px;height:34px;font-size:12px">TC</div>
+        <div><div style="font-size:13px;font-weight:600">Tom Chen</div><div style="font-size:11px;color:var(--green)">● Active now — Acme Corp</div></div>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button class="btn btn-ghost" style="font-size:12px">Convert to Ticket</button>
+          <button class="btn btn-ghost" style="font-size:12px">Transfer</button>
+          <button class="btn btn-danger" style="font-size:12px">End Chat</button>
+        </div>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px">
+        <div style="align-self:flex-start;max-width:70%">
+          <div style="background:var(--surface2);border-radius:12px 12px 12px 4px;padding:10px 14px;font-size:13px;line-height:1.6">Hi! I can't access my email since this morning. It's showing an authentication error.</div>
+          <div style="font-size:10.5px;color:var(--muted);margin-top:4px">10:42 AM</div>
+        </div>
+        <div style="align-self:flex-end;max-width:70%">
+          <div style="background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:12px 12px 4px 12px;padding:10px 14px;font-size:13px;line-height:1.6;color:#fff">Hi Tom! I can see your account. It looks like your password expired. Let me reset it for you now.</div>
+          <div style="font-size:10.5px;color:var(--muted);margin-top:4px;text-align:right">10:44 AM · James Davis</div>
+        </div>
+        <div style="align-self:flex-start;max-width:70%">
+          <div style="background:var(--surface2);border-radius:12px 12px 12px 4px;padding:10px 14px;font-size:13px;line-height:1.6">Thank you! I got the reset email. Do I need to update anything else?</div>
+          <div style="font-size:10.5px;color:var(--muted);margin-top:4px">10:46 AM</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;align-self:flex-start"><span style="font-size:11px;color:var(--muted)">Tom is typing</span><span style="display:flex;gap:3px"><span style="width:5px;height:5px;border-radius:50%;background:var(--muted);animation:pulse 1s infinite"></span><span style="width:5px;height:5px;border-radius:50%;background:var(--muted);animation:pulse 1s 0.2s infinite"></span><span style="width:5px;height:5px;border-radius:50%;background:var(--muted);animation:pulse 1s 0.4s infinite"></span></span></div>
+      </div>
+      <div style="padding:14px 18px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end">
+        <textarea class="form-textarea" placeholder="Type a message…" style="flex:1;min-height:40px;max-height:100px;resize:none"></textarea>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 10px">📎</button>
+          <button class="btn btn-primary" style="font-size:12px;padding:6px 12px">Send</button>
+        </div>
+      </div>
+    </div>
+    <!-- User info sidebar -->
+    <div style="width:220px;border-left:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:14px;overflow-y:auto">
+      <div style="text-align:center"><div class="ag-av" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc);width:50px;height:50px;font-size:16px;margin:0 auto 8px">TC</div><div style="font-size:13px;font-weight:600">Tom Chen</div><div style="font-size:11px;color:var(--muted)">tom.chen@acme.com</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Details</div>
+        <div style="font-size:12px"><span style="color:var(--muted)">Company:</span> Acme Corp</div>
+        <div style="font-size:12px"><span style="color:var(--muted)">Role:</span> Marketing Manager</div>
+        <div style="font-size:12px"><span style="color:var(--muted)">Device:</span> MacBook Pro</div>
+        <div style="font-size:12px"><span style="color:var(--muted)">OS:</span> macOS 14.5</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Past Tickets</div>
+        <div style="background:var(--surface2);border-radius:8px;padding:8px 10px;font-size:12px">#4801 · Password reset<br/><span style="color:var(--muted)">14 days ago</span></div>
+        <div style="background:var(--surface2);border-radius:8px;padding:8px 10px;font-size:12px">#4756 · VPN setup<br/><span style="color:var(--muted)">1 month ago</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== KNOWLEDGE BASE ==================== -->
+<div class="page" id="page-knowledge-base">
+  <div style="display:flex;gap:14px;align-items:center">
+    <div class="search-bar" style="flex:1;max-width:500px"><span style="color:var(--muted)">🔍</span><input placeholder="Search articles, guides, FAQs…"/></div>
+    <button class="btn btn-primary" onclick="openModal('new-article-modal')">+ New Article</button>
+  </div>
+  <div class="g4">
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">📄</div></div><div class="kpi-val">342</div><div class="kpi-label">Total Articles</div></div>
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">👁️</div></div><div class="kpi-val">8.4K</div><div class="kpi-label">Views This Month</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">👍</div></div><div class="kpi-val">94%</div><div class="kpi-label">Helpful Rating</div></div>
+    <div class="kpi purple"><div class="kpi-top"><div class="kpi-icon purple">🤖</div></div><div class="kpi-val">62%</div><div class="kpi-label">AI Deflection Rate</div></div>
+  </div>
+  <div class="g2">
+    <div>
+      <div style="font-family:var(--syne);font-size:13px;font-weight:700;margin-bottom:12px">Categories</div>
+      <div class="g2" style="gap:10px">
+        <div class="kb-card"><div class="kb-cat">Networking</div><div class="kb-title">VPN & Remote Access</div><div class="kb-meta">24 articles · 1.2K views</div></div>
+        <div class="kb-card"><div class="kb-cat">Security</div><div class="kb-title">MFA & Authentication</div><div class="kb-meta">18 articles · 980 views</div></div>
+        <div class="kb-card"><div class="kb-cat">Software</div><div class="kb-title">Microsoft 365</div><div class="kb-meta">31 articles · 2.1K views</div></div>
+        <div class="kb-card"><div class="kb-cat">Hardware</div><div class="kb-title">Device Setup & Config</div><div class="kb-meta">22 articles · 760 views</div></div>
+        <div class="kb-card"><div class="kb-cat">Email</div><div class="kb-title">Email & Calendar</div><div class="kb-meta">19 articles · 1.4K views</div></div>
+        <div class="kb-card"><div class="kb-cat">Accounts</div><div class="kb-title">Password & Access</div><div class="kb-meta">15 articles · 3.2K views</div></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:var(--syne);font-size:13px;font-weight:700;margin-bottom:12px">Top Articles</div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Article</th><th>Category</th><th>Views</th><th>Rating</th></tr></thead>
+          <tbody>
+            <tr><td><div style="font-weight:500;font-size:13px">How to connect to VPN</div></td><td style="font-size:12px;color:var(--muted)">Networking</td><td style="font-size:12px;font-weight:600">1,240</td><td style="color:var(--green);font-size:12px;font-weight:600">98%</td></tr>
+            <tr><td><div style="font-weight:500;font-size:13px">Reset your Microsoft password</div></td><td style="font-size:12px;color:var(--muted)">Accounts</td><td style="font-size:12px;font-weight:600">980</td><td style="color:var(--green);font-size:12px;font-weight:600">96%</td></tr>
+            <tr><td><div style="font-weight:500;font-size:13px">Setting up MFA on your account</div></td><td style="font-size:12px;color:var(--muted)">Security</td><td style="font-size:12px;font-weight:600">876</td><td style="color:var(--green);font-size:12px;font-weight:600">95%</td></tr>
+            <tr><td><div style="font-weight:500;font-size:13px">Install & activate Office 365</div></td><td style="font-size:12px;color:var(--muted)">Software</td><td style="font-size:12px;font-weight:600">754</td><td style="color:var(--yellow);font-size:12px;font-weight:600">91%</td></tr>
+            <tr><td><div style="font-weight:500;font-size:13px">Printer setup guide — Windows</div></td><td style="font-size:12px;color:var(--muted)">Hardware</td><td style="font-size:12px;font-weight:600">612</td><td style="color:var(--green);font-size:12px;font-weight:600">93%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== AI ASSIST ==================== -->
+<div class="page" id="page-ai-assist">
+  <div class="g4">
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">🤖</div></div><div class="kpi-val">62%</div><div class="kpi-label">AI Deflection</div></div>
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">💬</div></div><div class="kpi-val">1,240</div><div class="kpi-label">AI Chats Today</div></div>
+    <div class="kpi purple"><div class="kpi-top"><div class="kpi-icon purple">⚡</div></div><div class="kpi-val">8s</div><div class="kpi-label">Avg AI Response</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">📈</div></div><div class="kpi-val">88%</div><div class="kpi-label">Satisfaction</div></div>
+  </div>
+  <div class="g-main">
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="card-header"><div class="card-title">🤖 Nexus AI Assistant</div><span class="pill online">● Online</span></div>
+      <div style="flex:1;padding:18px;display:flex;flex-direction:column;gap:12px;min-height:300px">
+        <div style="background:var(--surface2);border-radius:12px;padding:12px 16px;max-width:80%">
+          <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px">🤖 Nexus AI</div>
+          <div style="font-size:13px;line-height:1.6">Hello! I'm the Nexus AI assistant. I can help you troubleshoot issues, answer questions, draft ticket responses, summarize tickets, and suggest KB articles. How can I assist you today?</div>
+        </div>
+        <div style="background:linear-gradient(135deg,rgba(79,142,247,0.15),rgba(124,92,252,0.1));border-radius:12px;padding:12px 16px;align-self:flex-end;max-width:80%">
+          <div style="font-size:13px;line-height:1.6">Summarize the top 3 open critical tickets</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:12px;padding:12px 16px;max-width:80%">
+          <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px">🤖 Nexus AI</div>
+          <div style="font-size:13px;line-height:1.6">Here are your top 3 critical open tickets:<br/><br/><strong>#4821 — VPN not connecting</strong> (Acme Corp): 34 users affected, RADIUS auth issue. SLA breaches in 48 min. Assigned to J. Davis.<br/><br/><strong>#4816 — MFA enrollment failing</strong> (SecureBank): Unassigned, SLA already breached. Needs immediate assignment.<br/><br/><strong>#4809 — Server PROD-DB-01 CPU 94%</strong>: Auto-alert. Monitoring engaged.</div>
+        </div>
+      </div>
+      <div style="padding:14px 18px;border-top:1px solid var(--border);display:flex;gap:10px">
+        <input class="form-input" placeholder="Ask AI to summarize, suggest, draft responses…" style="flex:1"/>
+        <button class="btn btn-primary">Ask AI ⚡</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><div class="card-header"><div class="card-title">AI Capabilities</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--surface2);border-radius:9px"><span style="font-size:18px">📝</span><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Draft Responses</div><div style="font-size:12px;color:var(--muted)">Auto-generate replies based on ticket context</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--surface2);border-radius:9px"><span style="font-size:18px">🔍</span><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Smart KB Search</div><div style="font-size:12px;color:var(--muted)">Surface relevant articles automatically</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--surface2);border-radius:9px"><span style="font-size:18px">📊</span><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Ticket Summaries</div><div style="font-size:12px;color:var(--muted)">Instant summaries for any ticket</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--surface2);border-radius:9px"><span style="font-size:18px">🤖</span><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Chatbot Deflection</div><div style="font-size:12px;color:var(--muted)">Resolve common issues before agents</div></div></div>
+      </div></div>
+      <div class="card"><div class="card-header"><div class="card-title">AI Activity Today</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:8px">
+        <div class="act-item"><div class="act-icon" style="background:rgba(34,211,160,0.15)">✅</div><div><div class="act-text"><strong>Password reset</strong> resolved by AI bot</div><div class="act-time">5 min ago</div></div></div>
+        <div class="act-item"><div class="act-icon" style="background:rgba(79,142,247,0.15)">📝</div><div><div class="act-text"><strong>Response drafted</strong> for ticket #4820</div><div class="act-time">12 min ago</div></div></div>
+        <div class="act-item"><div class="act-icon" style="background:rgba(124,92,252,0.15)">🔍</div><div><div class="act-text"><strong>KB article suggested</strong> — VPN setup guide</div><div class="act-time">18 min ago</div></div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ASSETS ==================== -->
+<div class="page" id="page-assets">
+  <div class="g5">
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">💻</div></div><div class="kpi-val">1,834</div><div class="kpi-label">Total Assets</div></div>
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">✅</div></div><div class="kpi-val">1,698</div><div class="kpi-label">Online</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">⚠️</div></div><div class="kpi-val">133</div><div class="kpi-label">Needs Attention</div></div>
+    <div class="kpi red"><div class="kpi-top"><div class="kpi-icon red">📴</div></div><div class="kpi-val">3</div><div class="kpi-label">Offline / Down</div></div>
+    <div class="kpi purple"><div class="kpi-top"><div class="kpi-icon purple">🔒</div></div><div class="kpi-val">18</div><div class="kpi-label">Unpatched</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Asset Inventory</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select class="form-select" style="width:110px;padding:5px 8px;font-size:12px"><option>All Types</option><option>Workstation</option><option>Server</option><option>Network</option><option>Printer</option></select>
+        <select class="form-select" style="width:110px;padding:5px 8px;font-size:12px"><option>All Status</option><option>Online</option><option>Offline</option><option>Warning</option></select>
+        <button class="btn btn-primary" style="font-size:12px;padding:6px 12px">+ Add Asset</button>
+      </div>
+    </div>
+    <table class="tbl">
+      <thead><tr><th>Device</th><th>Type</th><th>User</th><th>OS</th><th>IP Address</th><th>Status</th><th>CPU</th><th>RAM</th><th>Disk</th><th>Last Seen</th><th>Patches</th></tr></thead>
+      <tbody>
+        <tr><td><div style="font-weight:500">PROD-DB-01</div><div style="font-size:11px;color:var(--muted)">Dell PowerEdge R750</div></td><td style="font-size:12px">🖥️ Server</td><td style="font-size:12px;color:var(--muted)">System</td><td style="font-size:12px">Windows Server 2022</td><td style="font-size:12px;font-family:monospace;color:var(--muted)">192.168.1.10</td><td><span class="pill warning">Warning</span></td><td style="color:var(--red);font-weight:600;font-size:12px">94%</td><td style="font-size:12px;color:var(--muted)">67%</td><td style="font-size:12px;color:var(--muted)">45%</td><td style="font-size:12px;color:var(--muted)">Now</td><td><span class="pill patched">Up to date</span></td></tr>
+        <tr><td><div style="font-weight:500">WS-FINANCE-07</div><div style="font-size:11px;color:var(--muted)">Dell Latitude 5540</div></td><td style="font-size:12px">💻 Workstation</td><td style="font-size:12px;color:var(--muted)">J. Foster</td><td style="font-size:12px">Windows 11 Pro</td><td style="font-size:12px;font-family:monospace;color:var(--muted)">192.168.1.42</td><td><span class="pill online">Online</span></td><td style="font-size:12px">24%</td><td style="font-size:12px;color:var(--muted)">58%</td><td style="font-size:12px;color:var(--yellow)">89%</td><td style="font-size:12px;color:var(--muted)">2m ago</td><td><span class="pill unpatched">3 pending</span></td></tr>
+        <tr><td><div style="font-weight:500">PRN-HR-02</div><div style="font-size:11px;color:var(--muted)">HP LaserJet M507</div></td><td style="font-size:12px">🖨️ Printer</td><td style="font-size:12px;color:var(--muted)">HR Dept</td><td style="font-size:12px">Embedded</td><td style="font-size:12px;font-family:monospace;color:var(--muted)">192.168.2.18</td><td><span class="pill offline">Offline</span></td><td style="font-size:12px;color:var(--muted)">—</td><td style="font-size:12px;color:var(--muted)">—</td><td style="font-size:12px;color:var(--muted)">—</td><td style="font-size:12px;color:var(--red)">3h ago</td><td><span class="pill patched">Up to date</span></td></tr>
+        <tr><td><div style="font-weight:500">EDGE-RTR-03</div><div style="font-size:11px;color:var(--muted)">Cisco Catalyst 9300</div></td><td style="font-size:12px">🌐 Network</td><td style="font-size:12px;color:var(--muted)">Network</td><td style="font-size:12px">IOS-XE 17.9</td><td style="font-size:12px;font-family:monospace;color:var(--muted)">10.0.0.1</td><td><span class="pill online">Online</span></td><td style="font-size:12px">42%</td><td style="font-size:12px;color:var(--muted)">28%</td><td style="font-size:12px;color:var(--muted)">—</td><td style="font-size:12px;color:var(--muted)">Now</td><td><span class="pill patched">Up to date</span></td></tr>
+        <tr><td><div style="font-weight:500">Azure-VM-Prod-04</div><div style="font-size:11px;color:var(--muted)">Standard_D4s_v3</div></td><td style="font-size:12px">☁️ Cloud VM</td><td style="font-size:12px;color:var(--muted)">DevOps</td><td style="font-size:12px">Ubuntu 22.04</td><td style="font-size:12px;font-family:monospace;color:var(--muted)">10.1.2.5</td><td><span class="pill online">Online</span></td><td style="font-size:12px">18%</td><td style="font-size:12px;color:var(--muted)">44%</td><td style="font-size:12px;color:var(--muted)">32%</td><td style="font-size:12px;color:var(--muted)">Now</td><td><span class="pill patched">Up to date</span></td></tr>
+        <tr><td><div style="font-weight:500">WS-SALES-12</div><div style="font-size:11px;color:var(--muted)">MacBook Pro M3</div></td><td style="font-size:12px">💻 Workstation</td><td style="font-size:12px;color:var(--muted)">T. Chen</td><td style="font-size:12px">macOS 14.5</td><td style="font-size:12px;font-family:monospace;color:var(--muted)">192.168.1.55</td><td><span class="pill online">Online</span></td><td style="font-size:12px">8%</td><td style="font-size:12px;color:var(--muted)">34%</td><td style="font-size:12px;color:var(--muted)">56%</td><td style="font-size:12px;color:var(--muted)">1m ago</td><td><span class="pill unpatched">1 pending</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== SECURITY ==================== -->
+<div class="page" id="page-security">
+  <div class="g4">
+    <div class="kpi red"><div class="kpi-top"><div class="kpi-icon red">⚠️</div></div><div class="kpi-val">3</div><div class="kpi-label">Critical Vulns</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">🔍</div></div><div class="kpi-val">12</div><div class="kpi-label">Medium Vulns</div></div>
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">🛡️</div></div><div class="kpi-val">97.2%</div><div class="kpi-label">Endpoint Protection</div></div>
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">🔒</div></div><div class="kpi-val">94%</div><div class="kpi-label">MFA Coverage</div></div>
+  </div>
+  <div class="g-main">
+    <div class="g-main-left">
+      <div class="card"><div class="card-header"><div class="card-title">Vulnerabilities</div><button class="btn btn-ghost" style="font-size:12px">Run Scan</button></div><div class="card-body" style="padding-top:8px;padding-bottom:4px">
+        <div class="vuln-item"><div class="vuln-sev" style="background:rgba(244,63,94,0.15)">🔴</div><div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:3px">CVE-2024-21412 — Firewall bypass</div><div style="font-size:12px;color:var(--muted)">Affects: EDGE-RTR-03, EDGE-RTR-01 · CVSS: 9.8</div></div><span class="pill critical">Critical</span><button class="btn btn-danger" style="font-size:11px;padding:4px 10px;margin-left:8px">Patch</button></div>
+        <div class="vuln-item"><div class="vuln-sev" style="background:rgba(244,63,94,0.15)">🔴</div><div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:3px">CVE-2024-30103 — Outlook RCE</div><div style="font-size:12px;color:var(--muted)">Affects: 42 workstations · CVSS: 8.8</div></div><span class="pill critical">Critical</span><button class="btn btn-danger" style="font-size:11px;padding:4px 10px;margin-left:8px">Patch</button></div>
+        <div class="vuln-item"><div class="vuln-sev" style="background:rgba(249,115,22,0.15)">🟠</div><div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:3px">CVE-2024-26198 — Exchange spoofing</div><div style="font-size:12px;color:var(--muted)">Affects: MAIL-SRV-01 · CVSS: 7.5</div></div><span class="pill high">High</span><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;margin-left:8px">Review</button></div>
+        <div class="vuln-item"><div class="vuln-sev" style="background:rgba(251,191,36,0.15)">🟡</div><div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:3px">Weak TLS 1.0 on legacy server</div><div style="font-size:12px;color:var(--muted)">Affects: FILE-SRV-02 · CVSS: 5.3</div></div><span class="pill medium">Medium</span><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;margin-left:8px">Review</button></div>
+      </div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Recent Security Events</div></div>
+        <table class="tbl">
+          <thead><tr><th>Time</th><th>Event</th><th>Device</th><th>Severity</th></tr></thead>
+          <tbody>
+            <tr><td style="font-size:12px;color:var(--muted)">10:42 AM</td><td style="font-size:13px">Failed login — 5 attempts</td><td style="font-size:12px;color:var(--muted)">WS-SALES-08</td><td><span class="pill high">High</span></td></tr>
+            <tr><td style="font-size:12px;color:var(--muted)">09:15 AM</td><td style="font-size:13px">Malware detected & quarantined</td><td style="font-size:12px;color:var(--muted)">WS-HR-03</td><td><span class="pill critical">Critical</span></td></tr>
+            <tr><td style="font-size:12px;color:var(--muted)">08:30 AM</td><td style="font-size:13px">Firewall rule triggered</td><td style="font-size:12px;color:var(--muted)">EDGE-RTR-03</td><td><span class="pill medium">Medium</span></td></tr>
+            <tr><td style="font-size:12px;color:var(--muted)">Yesterday</td><td style="font-size:13px">Security scan completed</td><td style="font-size:12px;color:var(--muted)">All endpoints</td><td><span class="pill low">Info</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="g-main-right">
+      <div class="card"><div class="card-header"><div class="card-title">Security Score</div></div><div class="card-body" style="text-align:center">
+        <div style="position:relative;width:100px;height:100px;margin:0 auto 14px">
+          <svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#222740" stroke-width="10"/><circle cx="50" cy="50" r="42" fill="none" stroke="url(#scoreGrad)" stroke-width="10" stroke-dasharray="220 264" stroke-dashoffset="66" stroke-linecap="round" transform="rotate(-90 50 50)"/><defs><linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#22d3a0"/><stop offset="100%" stop-color="#4f8ef7"/></linearGradient></defs><text x="50" y="54" text-anchor="middle" fill="#e8eaf2" font-size="18" font-weight="800" font-family="Syne,sans-serif">74</text></svg>
+        </div>
+        <div style="font-size:13px;color:var(--yellow);font-weight:600;margin-bottom:4px">Fair — Needs Attention</div>
+        <div style="font-size:12px;color:var(--muted)">3 critical issues affecting score</div>
+      </div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Endpoint Protection</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+        <div class="sla-row" style="margin:0"><div class="sla-label">Antivirus</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:97%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">97%</div></div>
+        <div class="sla-row" style="margin:0"><div class="sla-label">Firewall</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:100%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">100%</div></div>
+        <div class="sla-row" style="margin:0"><div class="sla-label">Encryption</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:89%;background:var(--yellow)"></div></div><div class="sla-val" style="color:var(--yellow)">89%</div></div>
+        <div class="sla-row" style="margin:0;margin-bottom:0"><div class="sla-label">MFA Active</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:94%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">94%</div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PATCH MANAGEMENT ==================== -->
+<div class="page" id="page-patch">
+  <div class="g4">
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">✅</div></div><div class="kpi-val">1,321</div><div class="kpi-label">Up to Date</div></div>
+    <div class="kpi yellow" style="--yellow:#fbbf24"><div class="kpi-top"><div class="kpi-icon orange">⏳</div></div><div class="kpi-val">274</div><div class="kpi-label">Pending Patches</div></div>
+    <div class="kpi red"><div class="kpi-top"><div class="kpi-icon red">❌</div></div><div class="kpi-val">6</div><div class="kpi-label">Failed</div></div>
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">📅</div></div><div class="kpi-val">Tonight</div><div class="kpi-label">Next Run</div></div>
+  </div>
+  <div class="g-main">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Available Patches</div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:12px">Schedule</button><button class="btn btn-primary" style="font-size:12px">Deploy All</button></div></div>
+      <table class="tbl">
+        <thead><tr><th><input type="checkbox" style="accent-color:var(--accent)"/></th><th>Patch</th><th>Category</th><th>Severity</th><th>Affected</th><th>Release Date</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td><input type="checkbox" style="accent-color:var(--accent)"/></td><td><div style="font-weight:500">KB5040529 — Win11 Security</div><div style="font-size:11px;color:var(--muted)">Windows 11 cumulative</div></td><td style="font-size:12px">Security</td><td><span class="pill critical">Critical</span></td><td style="font-size:12px;font-weight:600">234</td><td style="font-size:12px;color:var(--muted)">Jul 9, 2024</td><td><span class="pill inprog">Deploying</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px">Pause</button></td></tr>
+          <tr><td><input type="checkbox" style="accent-color:var(--accent)"/></td><td><div style="font-weight:500">KB5039213 — Win Server 2022</div><div style="font-size:11px;color:var(--muted)">Server security rollup</div></td><td style="font-size:12px">Security</td><td><span class="pill high">High</span></td><td style="font-size:12px;font-weight:600">12</td><td style="font-size:12px;color:var(--muted)">Jul 9, 2024</td><td><span class="pill pending">Scheduled</span></td><td><button class="btn btn-primary" style="font-size:11px;padding:4px 8px">Deploy</button></td></tr>
+          <tr><td><input type="checkbox" style="accent-color:var(--accent)"/></td><td><div style="font-weight:500">Office 365 — Version 16.0.17726</div><div style="font-size:11px;color:var(--muted)">Monthly channel update</div></td><td style="font-size:12px">Application</td><td><span class="pill medium">Medium</span></td><td style="font-size:12px;font-weight:600">189</td><td style="font-size:12px;color:var(--muted)">Jul 2, 2024</td><td><span class="pill pending">Pending</span></td><td><button class="btn btn-primary" style="font-size:11px;padding:4px 8px">Deploy</button></td></tr>
+          <tr><td><input type="checkbox" style="accent-color:var(--accent)"/></td><td><div style="font-weight:500">Chrome — v126.0.6478.127</div><div style="font-size:11px;color:var(--muted)">Browser security update</div></td><td style="font-size:12px">Browser</td><td><span class="pill high">High</span></td><td style="font-size:12px;font-weight:600">310</td><td style="font-size:12px;color:var(--muted)">Jul 8, 2024</td><td><span class="pill pending">Pending</span></td><td><button class="btn btn-primary" style="font-size:11px;padding:4px 8px">Deploy</button></td></tr>
+          <tr><td><input type="checkbox" style="accent-color:var(--accent)"/></td><td><div style="font-weight:500">KB5040529 — Rollback failed nodes</div><div style="font-size:11px;color:var(--muted)">6 endpoints failed</div></td><td style="font-size:12px">Security</td><td><span class="pill critical">Critical</span></td><td style="font-size:12px;font-weight:600;color:var(--red)">6</td><td style="font-size:12px;color:var(--muted)">Jul 9, 2024</td><td><span class="pill offline">Failed</span></td><td><button class="btn btn-danger" style="font-size:11px;padding:4px 8px">Retry</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><div class="card-header"><div class="card-title">Patch Coverage</div></div><div class="card-body">
+        <div class="sla-row" style="margin-bottom:10px"><div class="sla-label">Windows 11</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:82%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">82%</div></div>
+        <div class="sla-row" style="margin-bottom:10px"><div class="sla-label">macOS</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:94%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">94%</div></div>
+        <div class="sla-row" style="margin-bottom:10px"><div class="sla-label">Linux</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:100%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">100%</div></div>
+        <div class="sla-row" style="margin-bottom:0"><div class="sla-label">Server OS</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:75%;background:var(--yellow)"></div></div><div class="sla-val" style="color:var(--yellow)">75%</div></div>
+      </div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Schedule</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:12px;color:var(--muted)">Next automatic run</div><div style="font-size:14px;font-weight:600;margin-top:2px">Tonight, 11:00 PM</div></div>
+        <div style="background:var(--surface2);border-radius:8px;padding:10px 12px"><div style="font-size:12px;color:var(--muted)">Maintenance window</div><div style="font-size:14px;font-weight:600;margin-top:2px">Fri 11 PM – Sat 5 AM</div></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center">▶ Run Now</button>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MONITORING ==================== -->
+<div class="page" id="page-monitoring">
+  <div class="g4">
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">🟢</div></div><div class="kpi-val">1,698</div><div class="kpi-label">Devices Online</div></div>
+    <div class="kpi red"><div class="kpi-top"><div class="kpi-icon red">🔴</div></div><div class="kpi-val">3</div><div class="kpi-label">Down</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">⚠️</div></div><div class="kpi-val">7</div><div class="kpi-label">Alerts Active</div></div>
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">📡</div></div><div class="kpi-val">99.4%</div><div class="kpi-label">Network Uptime</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+    <div class="monitor-card alert"><div class="mc-top"><div><div class="mc-name">PROD-DB-01</div><div class="mc-sub">Windows Server · Production</div></div><span class="pill warning">Warning</span></div><div class="mc-metric" style="color:var(--red)">94%</div><div class="mc-label">CPU Utilization</div><div class="sparkline">${Array.from({length:12},(_,i)=>`<div class="sp-bar" style="height:${20+Math.random()*10}px;background:var(--red);opacity:${0.4+i*0.05}"></div>`).join('')}</div></div>
+    <div class="monitor-card"><div class="mc-top"><div><div class="mc-name">WEB-SRV-01</div><div class="mc-sub">Nginx · Production</div></div><span class="pill online">Healthy</span></div><div class="mc-metric" style="color:var(--green)">23%</div><div class="mc-label">CPU Utilization</div><div class="sparkline">${Array.from({length:12},(_,i)=>`<div class="sp-bar" style="height:${8+Math.random()*15}px;background:var(--green);opacity:${0.4+i*0.05}"></div>`).join('')}</div></div>
+    <div class="monitor-card"><div class="mc-top"><div><div class="mc-name">EDGE-RTR-03</div><div class="mc-sub">Cisco · Edge</div></div><span class="pill online">Healthy</span></div><div class="mc-metric" style="color:var(--accent)">42%</div><div class="mc-label">Bandwidth Usage</div><div class="sparkline">${Array.from({length:12},(_,i)=>`<div class="sp-bar" style="height:${15+Math.random()*20}px;background:var(--accent);opacity:${0.4+i*0.05}"></div>`).join('')}</div></div>
+    <div class="monitor-card"><div class="mc-top"><div><div class="mc-name">Azure-VM-04</div><div class="mc-sub">Ubuntu · Cloud</div></div><span class="pill online">Healthy</span></div><div class="mc-metric" style="color:var(--green)">18%</div><div class="mc-label">CPU Utilization</div><div class="sparkline">${Array.from({length:12},(_,i)=>`<div class="sp-bar" style="height:${5+Math.random()*14}px;background:var(--green);opacity:${0.4+i*0.05}"></div>`).join('')}</div></div>
+    <div class="monitor-card alert" style="border-color:rgba(244,63,94,0.3)"><div class="mc-top"><div><div class="mc-name">PRN-HR-02</div><div class="mc-sub">HP LaserJet · HR</div></div><span class="pill offline">Offline</span></div><div class="mc-metric" style="color:var(--red)">DOWN</div><div class="mc-label">Last seen 3h ago</div><div style="margin-top:8px;font-size:12px;color:var(--muted)">Ticket #4823 auto-created</div></div>
+    <div class="monitor-card"><div class="mc-top"><div><div class="mc-name">FILE-SRV-02</div><div class="mc-sub">Windows · File Server</div></div><span class="pill warning">Warning</span></div><div class="mc-metric" style="color:var(--orange)">89%</div><div class="mc-label">Disk Usage</div><div class="sparkline">${Array.from({length:12},(_,i)=>`<div class="sp-bar" style="height:${20+i*2}px;background:var(--orange);opacity:${0.5+i*0.04}"></div>`).join('')}</div></div>
+  </div>
+</div>
+
+<!-- ==================== AUTOMATION ==================== -->
+<div class="page" id="page-automation">
+  <div class="g4">
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">⚡</div></div><div class="kpi-val">24</div><div class="kpi-label">Active Rules</div></div>
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">🔄</div></div><div class="kpi-val">1,842</div><div class="kpi-label">Actions This Month</div></div>
+    <div class="kpi purple"><div class="kpi-top"><div class="kpi-icon purple">⏱️</div></div><div class="kpi-val">94h</div><div class="kpi-label">Time Saved</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">📈</div></div><div class="kpi-val">6</div><div class="kpi-label">Ran Today</div></div>
+  </div>
+  <div class="g-main">
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-family:var(--syne);font-size:14px;font-weight:700">Automation Rules</div>
+        <button class="btn btn-primary" style="font-size:12px">+ New Rule</button>
+      </div>
+      <div class="rule-card"><div class="rule-icon">🔥</div><div class="rule-info"><div class="rule-name">Auto-escalate critical tickets</div><div class="rule-desc">If ticket priority = Critical AND unassigned &gt; 30 min → assign to on-call agent + notify manager</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Triggered 14 times this week</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="rule-card"><div class="rule-icon">📧</div><div class="rule-info"><div class="rule-name">SLA breach email alert</div><div class="rule-desc">If SLA &lt; 30 min remaining → email assigned agent + CC supervisor</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Triggered 6 times this week</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="rule-card"><div class="rule-icon">💻</div><div class="rule-info"><div class="rule-name">Auto-patch low-risk endpoints</div><div class="rule-desc">Every Friday 11 PM → deploy low/medium severity patches to workstations</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Last ran: Friday 11:00 PM</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="rule-card"><div class="rule-icon">🔒</div><div class="rule-info"><div class="rule-name">Lock account on failed logins</div><div class="rule-desc">If &gt; 5 failed login attempts in 10 min → lock account + create security ticket</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Triggered 2 times today</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="rule-card"><div class="rule-icon">🤖</div><div class="rule-info"><div class="rule-name">AI auto-response for common issues</div><div class="rule-desc">If ticket category = Password Reset → send AI-generated KB link + instructions</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Triggered 31 times this week</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="rule-card"><div class="rule-icon">📊</div><div class="rule-info"><div class="rule-name">Weekly IT report email</div><div class="rule-desc">Every Monday 8 AM → generate and email ticket/asset summary to managers</div><div style="font-size:11px;color:var(--muted);margin-top:5px">Last ran: Monday 08:00 AM</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <div class="card"><div class="card-header"><div class="card-title">Recent Runs</div></div><div class="card-body" style="padding-top:6px;padding-bottom:6px">
+        <div class="act-item"><div class="act-icon" style="background:rgba(34,211,160,0.15)">✅</div><div><div class="act-text"><strong>SLA alert</strong> sent for #4821</div><div class="act-time">42 min ago</div></div></div>
+        <div class="act-item"><div class="act-icon" style="background:rgba(34,211,160,0.15)">✅</div><div><div class="act-text"><strong>Auto-escalated</strong> #4816 to on-call</div><div class="act-time">1h ago</div></div></div>
+        <div class="act-item"><div class="act-icon" style="background:rgba(34,211,160,0.15)">✅</div><div><div class="act-text"><strong>Account locked</strong> WS-SALES-08</div><div class="act-time">2h ago</div></div></div>
+        <div class="act-item"><div class="act-icon" style="background:rgba(79,142,247,0.15)">🤖</div><div><div class="act-text"><strong>AI reply sent</strong> for ticket #4812</div><div class="act-time">3h ago</div></div></div>
+      </div></div>
+      <div class="card"><div class="card-header"><div class="card-title">Automation Stats</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+        <div class="sla-row" style="margin:0"><div class="sla-label">Success rate</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:98%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">98%</div></div>
+        <div style="font-size:12px;color:var(--muted)">1,842 actions run this month<br/>94 hours of manual work saved<br/>$4,200 estimated cost savings</div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== CLIENTS ==================== -->
+<div class="page" id="page-clients">
+  <div class="g4">
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">🏢</div></div><div class="kpi-val">28</div><div class="kpi-label">Total Clients</div></div>
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">✅</div></div><div class="kpi-val">24</div><div class="kpi-label">Active</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">🎫</div></div><div class="kpi-val">247</div><div class="kpi-label">Open Tickets</div></div>
+    <div class="kpi purple"><div class="kpi-top"><div class="kpi-icon purple">💻</div></div><div class="kpi-val">1,834</div><div class="kpi-label">Managed Devices</div></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <div class="search-bar" style="width:280px"><span style="color:var(--muted)">🔍</span><input placeholder="Search clients…"/></div>
+    <button class="btn btn-primary" style="font-size:12px">+ Add Client</button>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+    <div class="client-card"><div class="client-logo" style="background:rgba(79,142,247,0.15)">🏦</div><div class="client-name">Acme Corp</div><div class="client-type">Enterprise · 420 users</div><div class="client-stats"><div class="client-stat"><div class="client-stat-val" style="color:var(--red)">8</div><div class="client-stat-key">Open tickets</div></div><div class="client-stat"><div class="client-stat-val">312</div><div class="client-stat-key">Devices</div></div><div class="client-stat"><div class="client-stat-val" style="color:var(--green)">97%</div><div class="client-stat-key">CSAT</div></div></div></div>
+    <div class="client-card"><div class="client-logo" style="background:rgba(34,211,160,0.15)">🚀</div><div class="client-name">TechStart Inc</div><div class="client-type">SMB · 85 users</div><div class="client-stats"><div class="client-stat"><div class="client-stat-val" style="color:var(--orange)">5</div><div class="client-stat-key">Open tickets</div></div><div class="client-stat"><div class="client-stat-val">74</div><div class="client-stat-key">Devices</div></div><div class="client-stat"><div class="client-stat-val" style="color:var(--green)">94%</div><div class="client-stat-key">CSAT</div></div></div></div>
+    <div class="client-card"><div class="client-logo" style="background:rgba(249,115,22,0.15)">🛒</div><div class="client-name">Global Retail</div><div class="client-type">Enterprise · 1,200 users</div><div class="client-stats"><div class="client-stat"><div class="client-stat-val" style="color:var(--red)">14</div><div class="client-stat-key">Open tickets</div></div><div class="client-stat"><div class="client-stat-val">890</div><div class="client-stat-key">Devices</div></div><div class="client-stat"><div class="client-stat-val" style="color:var(--yellow)">89%</div><div class="client-stat-key">CSAT</div></div></div></div>
+    <div class="client-card"><div class="client-logo" style="background:rgba(124,92,252,0.15)">🔒</div><div class="client-name">SecureBank Ltd</div><div class="client-type">Financial · 340 users</div><div class="client-stats"><div class="client-stat"><div class="client-stat-val" style="color:var(--red)">3</div><div class="client-stat-key">Open tickets</div></div><div class="client-stat"><div class="client-stat-val">284</div><div class="client-stat-key">Devices</div></div><div class="client-stat"><div class="client-stat-val" style="color:var(--green)">99%</div><div class="client-stat-key">CSAT</div></div></div></div>
+    <div class="client-card"><div class="client-logo" style="background:rgba(244,63,94,0.15)">🏥</div><div class="client-name">MedGroup</div><div class="client-type">Healthcare · 210 users</div><div class="client-stats"><div class="client-stat"><div class="client-stat-val">2</div><div class="client-stat-key">Open tickets</div></div><div class="client-stat"><div class="client-stat-val">178</div><div class="client-stat-key">Devices</div></div><div class="client-stat"><div class="client-stat-val" style="color:var(--green)">96%</div><div class="client-stat-key">CSAT</div></div></div></div>
+    <div class="client-card"><div class="client-logo" style="background:rgba(34,211,160,0.15)">🎓</div><div class="client-name">EduNet</div><div class="client-type">Education · 560 users</div><div class="client-stats"><div class="client-stat"><div class="client-stat-val" style="color:var(--orange)">6</div><div class="client-stat-key">Open tickets</div></div><div class="client-stat"><div class="client-stat-val">420</div><div class="client-stat-key">Devices</div></div><div class="client-stat"><div class="client-stat-val" style="color:var(--green)">92%</div><div class="client-stat-key">CSAT</div></div></div></div>
+    <div class="client-card"><div class="client-logo" style="background:rgba(79,142,247,0.15)">⚖️</div><div class="client-name">LegalEdge</div><div class="client-type">Legal · 120 users</div><div class="client-stats"><div class="client-stat"><div class="client-stat-val">1</div><div class="client-stat-key">Open tickets</div></div><div class="client-stat"><div class="client-stat-val">98</div><div class="client-stat-key">Devices</div></div><div class="client-stat"><div class="client-stat-val" style="color:var(--green)">100%</div><div class="client-stat-key">CSAT</div></div></div></div>
+    <div class="client-card" style="background:var(--surface2);border-style:dashed;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:140px;cursor:pointer" onclick="openModal('add-client-modal')"><div style="font-size:28px;margin-bottom:8px;color:var(--muted)">+</div><div style="font-size:13px;color:var(--muted)">Add New Client</div></div>
+  </div>
+</div>
+
+<!-- ==================== DEPARTMENTS ==================== -->
+<div class="page" id="page-departments">
+  <div class="g4">
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">🏢</div></div><div class="kpi-val">12</div><div class="kpi-label">Departments</div></div>
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">👥</div></div><div class="kpi-val">64</div><div class="kpi-label">Total Agents</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">🎫</div></div><div class="kpi-val">247</div><div class="kpi-label">Active Tickets</div></div>
+    <div class="kpi purple"><div class="kpi-top"><div class="kpi-icon purple">⭐</div></div><div class="kpi-val">96%</div><div class="kpi-label">Avg CSAT</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">All Departments</div><button class="btn btn-primary" style="font-size:12px">+ Add Department</button></div>
+    <table class="tbl">
+      <thead><tr><th>Department</th><th>Head</th><th>Agents</th><th>Open Tickets</th><th>Avg Response</th><th>CSAT</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">🌐</span><div><div style="font-weight:500">Networking</div><div style="font-size:11px;color:var(--muted)">Network & Infrastructure</div></div></div></td><td style="font-size:13px">Ryan Lee</td><td style="font-size:13px;font-weight:600">8</td><td style="color:var(--red);font-weight:600;font-size:13px">42</td><td style="font-size:13px">1.8h</td><td style="color:var(--green);font-weight:600;font-size:13px">97%</td><td><span class="pill active">Active</span></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">🛡️</span><div><div style="font-weight:500">Security</div><div style="font-size:11px;color:var(--muted)">Cybersecurity & Compliance</div></div></div></td><td style="font-size:13px">Sarah Admin</td><td style="font-size:13px;font-weight:600">5</td><td style="color:var(--orange);font-weight:600;font-size:13px">14</td><td style="font-size:13px">0.9h</td><td style="color:var(--green);font-weight:600;font-size:13px">99%</td><td><span class="pill active">Active</span></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">💻</span><div><div style="font-weight:500">Help Desk — Tier 1</div><div style="font-size:11px;color:var(--muted)">First-line support</div></div></div></td><td style="font-size:13px">James Davis</td><td style="font-size:13px;font-weight:600">18</td><td style="color:var(--red);font-weight:600;font-size:13px">124</td><td style="font-size:13px">2.4h</td><td style="color:var(--yellow);font-weight:600;font-size:13px">93%</td><td><span class="pill active">Active</span></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">⚙️</span><div><div style="font-weight:500">Systems Admin</div><div style="font-size:11px;color:var(--muted)">Servers & Patch Management</div></div></div></td><td style="font-size:13px">Ryan Lee</td><td style="font-size:13px;font-weight:600">7</td><td style="color:var(--orange);font-weight:600;font-size:13px">28</td><td style="font-size:13px">3.2h</td><td style="color:var(--green);font-weight:600;font-size:13px">95%</td><td><span class="pill active">Active</span></td></tr>
+        <tr><td><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">☁️</span><div><div style="font-weight:500">Cloud & DevOps</div><div style="font-size:11px;color:var(--muted)">Cloud infrastructure</div></div></div></td><td style="font-size:13px">Mia Kim</td><td style="font-size:13px;font-weight:600">6</td><td style="font-weight:600;font-size:13px">12</td><td style="font-size:13px">1.1h</td><td style="color:var(--green);font-weight:600;font-size:13px">98%</td><td><span class="pill active">Active</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== ALERTS ==================== -->
+<div class="page" id="page-alerts">
+  <div class="g4">
+    <div class="kpi red"><div class="kpi-top"><div class="kpi-icon red">🔴</div></div><div class="kpi-val">3</div><div class="kpi-label">Critical</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">🟠</div></div><div class="kpi-val">4</div><div class="kpi-label">Warning</div></div>
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">🔵</div></div><div class="kpi-val">12</div><div class="kpi-label">Informational</div></div>
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">✅</div></div><div class="kpi-val">84</div><div class="kpi-label">Resolved Today</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">All Alerts</div><div style="display:flex;gap:8px"><button class="btn btn-ghost" style="font-size:12px">Filter</button><button class="btn btn-danger" style="font-size:12px">Acknowledge All</button></div></div>
+    <table class="tbl">
+      <thead><tr><th>Severity</th><th>Alert</th><th>Device/Source</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill critical">Critical</span></td><td><div style="font-weight:500">CPU spike — 94% sustained 30+ min</div><div style="font-size:11px;color:var(--muted)">Auto-escalated to #4821</div></td><td style="font-size:12px;color:var(--muted)">PROD-DB-01</td><td style="font-size:12px;color:var(--muted)">Now</td><td><span class="pill inprog">Active</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px">Acknowledge</button></td></tr>
+        <tr><td><span class="pill critical">Critical</span></td><td><div style="font-weight:500">SLA breached — ticket unassigned 2h+</div></td><td style="font-size:12px;color:var(--muted)">#4816</td><td style="font-size:12px;color:var(--muted)">32m ago</td><td><span class="pill inprog">Active</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px">Assign</button></td></tr>
+        <tr><td><span class="pill critical">Critical</span></td><td><div style="font-weight:500">Malware detected & quarantined</div></td><td style="font-size:12px;color:var(--muted)">WS-HR-03</td><td style="font-size:12px;color:var(--muted)">1h ago</td><td><span class="pill resolved">Resolved</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px">Review</button></td></tr>
+        <tr><td><span class="pill high">Warning</span></td><td><div style="font-weight:500">Patch deployment failed — 6 endpoints</div></td><td style="font-size:12px;color:var(--muted)">Patch Agent</td><td style="font-size:12px;color:var(--muted)">2h ago</td><td><span class="pill inprog">Active</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px">Retry</button></td></tr>
+        <tr><td><span class="pill high">Warning</span></td><td><div style="font-weight:500">Disk usage 89% approaching limit</div></td><td style="font-size:12px;color:var(--muted)">FILE-SRV-02</td><td style="font-size:12px;color:var(--muted)">2h ago</td><td><span class="pill inprog">Active</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px">Review</button></td></tr>
+        <tr><td><span class="pill open">Info</span></td><td><div style="font-weight:500">SSL certificate expiring in 14 days</div></td><td style="font-size:12px;color:var(--muted)">portal.acme.com</td><td style="font-size:12px;color:var(--muted)">3h ago</td><td><span class="pill pending">Pending</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px">Renew</button></td></tr>
+        <tr><td><span class="pill open">Info</span></td><td><div style="font-weight:500">Security scan complete — 3 vulns found</div></td><td style="font-size:12px;color:var(--muted)">All endpoints</td><td style="font-size:12px;color:var(--muted)">3h ago</td><td><span class="pill resolved">Closed</span></td><td><button class="btn btn-ghost" style="font-size:11px;padding:4px 8px">View Report</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ==================== ANALYTICS ==================== -->
+<div class="page" id="page-analytics">
+  <div class="g4">
+    <div class="kpi blue"><div class="kpi-top"><div class="kpi-icon blue">📊</div></div><div class="kpi-val">331</div><div class="kpi-label">Tickets This Week</div></div>
+    <div class="kpi green"><div class="kpi-top"><div class="kpi-icon green">⬇️</div><div class="kpi-trend up">↓18%</div></div><div class="kpi-val">2.4h</div><div class="kpi-label">Avg First Response</div></div>
+    <div class="kpi purple"><div class="kpi-top"><div class="kpi-icon purple">😊</div></div><div class="kpi-val">96.2%</div><div class="kpi-label">CSAT Score</div></div>
+    <div class="kpi orange"><div class="kpi-top"><div class="kpi-icon orange">🔄</div></div><div class="kpi-val">86%</div><div class="kpi-label">First Contact Resolve</div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="card-header"><div class="card-title">Ticket Volume — Last 30 Days</div></div><div class="card-body">
+      <div style="display:flex;align-items:flex-end;gap:4px;height:120px">
+        ${[22,18,31,28,24,20,14,32,27,24,19,30,35,28,22,18,24,30,26,21,17,29,33,28,24,22,19,28,34,31].map((h,i)=>`<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end"><div style="background:${i===29?'var(--accent2)':'var(--accent)'};border-radius:3px 3px 0 0;height:${h*2.8}px;opacity:${i===29?1:0.6};transition:opacity 0.15s" title="${h} tickets"></div></div>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted)"><span>Jun 16</span><span>Jun 30</span><span>Jul 10</span><span>Jul 16</span></div>
+    </div></div>
+    <div class="card"><div class="card-header"><div class="card-title">CSAT Trend</div></div><div class="card-body">
+      <div style="display:flex;align-items:flex-end;gap:4px;height:120px">
+        ${[91,93,92,94,95,93,96,94,97,95,96,97,96,98,97,96,98,97,96,97,98,96,97,96,97,96,98,97,96,97].map((h,i)=>`<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end"><div style="background:var(--green);border-radius:3px 3px 0 0;height:${(h-88)*8}px;opacity:0.7"></div></div>`).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted)"><span>Jun 16</span><span>Jun 30</span><span>Jul 10</span><span>Jul 16</span></div>
+    </div></div>
+  </div>
+  <div class="g3">
+    <div class="card"><div class="card-header"><div class="card-title">Top Categories</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+      <div class="sla-row" style="margin:0"><div class="sla-label">Network/VPN</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:34%;background:var(--accent)"></div></div><div class="sla-val" style="color:var(--accent)">34%</div></div>
+      <div class="sla-row" style="margin:0"><div class="sla-label">Hardware</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:22%;background:var(--accent2)"></div></div><div class="sla-val" style="color:var(--accent2)">22%</div></div>
+      <div class="sla-row" style="margin:0"><div class="sla-label">Software</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:18%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">18%</div></div>
+      <div class="sla-row" style="margin:0"><div class="sla-label">Accounts</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:15%;background:var(--orange)"></div></div><div class="sla-val" style="color:var(--orange)">15%</div></div>
+      <div class="sla-row" style="margin:0"><div class="sla-label">Email</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:11%;background:var(--muted)"></div></div><div class="sla-val" style="color:var(--muted)">11%</div></div>
+    </div></div>
+    <div class="card"><div class="card-header"><div class="card-title">Agent Performance</div></div>
+      <table class="tbl">
+        <thead><tr><th>Agent</th><th>Closed</th><th>Avg Time</th><th>CSAT</th></tr></thead>
+        <tbody>
+          <tr><td><div style="display:flex;align-items:center;gap:6px"><span class="mav" style="background:linear-gradient(135deg,#4f8ef7,#7c5cfc)">JD</span>J. Davis</div></td><td style="font-size:13px;font-weight:600">84</td><td style="font-size:13px">1.4h</td><td style="color:var(--green);font-size:13px;font-weight:600">99%</td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:6px"><span class="mav" style="background:linear-gradient(135deg,#22d3a0,#4f8ef7)">MK</span>M. Kim</div></td><td style="font-size:13px;font-weight:600">67</td><td style="font-size:13px">2.1h</td><td style="color:var(--green);font-size:13px;font-weight:600">96%</td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:6px"><span class="mav" style="background:linear-gradient(135deg,#f97316,#fbbf24)">RL</span>R. Lee</div></td><td style="font-size:13px;font-weight:600">52</td><td style="font-size:13px">3.2h</td><td style="color:var(--yellow);font-size:13px;font-weight:600">92%</td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:6px"><span class="mav" style="background:linear-gradient(135deg,#f43f5e,#7c5cfc)">AP</span>A. Patel</div></td><td style="font-size:13px;font-weight:600">41</td><td style="font-size:13px">2.8h</td><td style="color:var(--green);font-size:13px;font-weight:600">94%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card"><div class="card-header"><div class="card-title">SLA Compliance</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:10px">
+      <div class="sla-row" style="margin:0"><div class="sla-label">Critical</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:78%;background:var(--orange)"></div></div><div class="sla-val" style="color:var(--orange)">78%</div></div>
+      <div class="sla-row" style="margin:0"><div class="sla-label">High</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:88%;background:var(--yellow)"></div></div><div class="sla-val" style="color:var(--yellow)">88%</div></div>
+      <div class="sla-row" style="margin:0"><div class="sla-label">Medium</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:96%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">96%</div></div>
+      <div class="sla-row" style="margin:0"><div class="sla-label">Low</div><div style="flex:1" class="pbar"><div class="pbar-fill" style="width:99%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">99%</div></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ==================== REPORTS ==================== -->
+<div class="page" id="page-reports">
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px">
+    <button class="btn btn-primary" style="font-size:12px">+ Create Report</button>
+    <button class="btn btn-ghost" style="font-size:12px">Schedule</button>
+    <button class="btn btn-ghost" style="font-size:12px">Export</button>
+  </div>
+  <div class="g2">
+    <div>
+      <div style="font-family:var(--syne);font-size:13px;font-weight:700;margin-bottom:12px">Standard Reports</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="report-card"><div class="report-icon" style="background:rgba(79,142,247,0.15)">📊</div><div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:2px">Weekly Ticket Summary</div><div style="font-size:12px;color:var(--muted)">Open, closed, SLA compliance, agent performance</div></div><button class="btn btn-primary" style="font-size:11px;padding:5px 12px">Run</button></div>
+        <div class="report-card"><div class="report-icon" style="background:rgba(34,211,160,0.15)">🛡️</div><div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:2px">Security & Vulnerability Report</div><div style="font-size:12px;color:var(--muted)">CVEs, endpoint protection, patch status</div></div><button class="btn btn-primary" style="font-size:11px;padding:5px 12px">Run</button></div>
+        <div class="report-card"><div class="report-icon" style="background:rgba(124,92,252,0.15)">💻</div><div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:2px">Asset Inventory Report</div><div style="font-size:12px;color:var(--muted)">All devices, health, software, warranty status</div></div><button class="btn btn-primary" style="font-size:11px;padding:5px 12px">Run</button></div>
+        <div class="report-card"><div class="report-icon" style="background:rgba(249,115,22,0.15)">📈</div><div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:2px">SLA Compliance Report</div><div style="font-size:12px;color:var(--muted)">Breaches, at-risk tickets, by client</div></div><button class="btn btn-primary" style="font-size:11px;padding:5px 12px">Run</button></div>
+        <div class="report-card"><div class="report-icon" style="background:rgba(251,191,36,0.15)">😊</div><div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:2px">CSAT & Satisfaction Report</div><div style="font-size:12px;color:var(--muted)">Customer ratings, trends, agent scores</div></div><button class="btn btn-primary" style="font-size:11px;padding:5px 12px">Run</button></div>
+        <div class="report-card"><div class="report-icon" style="background:rgba(34,211,160,0.15)">🔄</div><div style="flex:1"><div style="font-size:13px;font-weight:600;margin-bottom:2px">Patch Compliance Report</div><div style="font-size:12px;color:var(--muted)">Patch coverage by OS, client, severity</div></div><button class="btn btn-primary" style="font-size:11px;padding:5px 12px">Run</button></div>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:var(--syne);font-size:13px;font-weight:700;margin-bottom:12px">Scheduled Reports</div>
+      <div class="card">
+        <table class="tbl">
+          <thead><tr><th>Report</th><th>Schedule</th><th>Recipients</th><th>Last Run</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td style="font-size:13px;font-weight:500">Weekly Ticket Summary</td><td style="font-size:12px;color:var(--muted)">Every Monday 8 AM</td><td style="font-size:12px;color:var(--muted)">Management team</td><td style="font-size:12px;color:var(--muted)">Mon 08:01</td><td><span class="pill active">Active</span></td></tr>
+            <tr><td style="font-size:13px;font-weight:500">Monthly Security</td><td style="font-size:12px;color:var(--muted)">1st of month 9 AM</td><td style="font-size:12px;color:var(--muted)">CISO, IT Director</td><td style="font-size:12px;color:var(--muted)">Jul 1</td><td><span class="pill active">Active</span></td></tr>
+            <tr><td style="font-size:13px;font-weight:500">Patch Status</td><td style="font-size:12px;color:var(--muted)">Every Friday 6 PM</td><td style="font-size:12px;color:var(--muted)">Sys Admins</td><td style="font-size:12px;color:var(--muted)">Fri 18:02</td><td><span class="pill active">Active</span></td></tr>
+            <tr><td style="font-size:13px;font-weight:500">CSAT Report</td><td style="font-size:12px;color:var(--muted)">Every Sunday 7 AM</td><td style="font-size:12px;color:var(--muted)">All managers</td><td style="font-size:12px;color:var(--muted)">Sun 07:01</td><td><span class="pill inactive">Paused</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SETTINGS ==================== -->
+<div class="page" id="page-settings">
+  <div style="display:grid;grid-template-columns:200px 1fr;gap:20px">
+    <div>
+      <div class="settings-nav">
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:4px 12px 8px">General</div>
+        <div class="settings-nav-item active" onclick="switchSettings(this,'general')">General</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'notifications')">Notifications</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'sla')">SLA Policies</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'branding')">Branding</div>
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:12px 12px 8px">Security</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'security-s')">Security</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'mfa')">MFA</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'sso')">SSO / SAML</div>
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:12px 12px 8px">Integrations</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'integrations')">Integrations</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'api')">API Keys</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'email')">Email Settings</div>
+        <div style="font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:12px 12px 8px">Team</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'agents')">Agents & Roles</div>
+        <div class="settings-nav-item" onclick="switchSettings(this,'billing')">Billing</div>
+      </div>
+    </div>
+    <div id="settings-content">
+      <!-- General Settings -->
+      <div id="settings-general">
+        <div class="card"><div class="card-header"><div class="card-title">General Settings</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:16px">
+          <div class="form-grid">
+            <div class="form-row"><label>Company Name</label><input class="form-input" value="Nexus IT Solutions"/></div>
+            <div class="form-row"><label>Support Email</label><input class="form-input" value="support@nexusit.com"/></div>
+            <div class="form-row"><label>Timezone</label><select class="form-select"><option>Africa/Johannesburg (SAST +2)</option><option>UTC</option><option>America/New_York</option><option>Europe/London</option></select></div>
+            <div class="form-row"><label>Default Language</label><select class="form-select"><option>English</option><option>Afrikaans</option><option>French</option></select></div>
+            <div class="form-row"><label>Date Format</label><select class="form-select"><option>DD/MM/YYYY</option><option>MM/DD/YYYY</option><option>YYYY-MM-DD</option></select></div>
+            <div class="form-row"><label>Business Hours</label><select class="form-select"><option>Mon–Fri 8AM–6PM</option><option>24/7</option><option>Custom</option></select></div>
+          </div>
+          <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary">Save Changes</button></div>
+        </div></div>
+        <div class="card" style="margin-top:16px"><div class="card-header"><div class="card-title">Ticket Defaults</div></div><div class="card-body" style="display:flex;flex-direction:column;gap:14px">
+          <div class="form-grid">
+            <div class="form-row"><label>Default Priority</label><select class="form-select"><option>Medium</option><option>Low</option><option>High</option><option>Critical</option></select></div>
+            <div class="form-row"><label>Auto-assign Method</label><select class="form-select"><option>Round Robin</option><option>Load Balanced</option><option>Manual</option><option>AI Suggested</option></select></div>
+            <div class="form-row"><label>Auto-close After</label><select class="form-select"><option>7 days (resolved)</option><option>3 days</option><option>14 days</option><option>Never</option></select></div>
+            <div class="form-row"><label>CSAT Survey After</label><select class="form-select"><option>On resolution</option><option>24h after close</option><option>Disabled</option></select></div>
+          </div>
+          <div style="display:flex;justify-content:flex-end"><button class="btn btn-primary">Save Changes</button></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- New Ticket Modal -->
+<div class="modal-overlay" id="new-ticket-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Create New Ticket</div><div class="modal-close" onclick="closeModal('new-ticket-modal')">✕</div></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Subject *</label><input class="form-input" placeholder="Brief description of the issue"/></div>
+      <div class="form-grid">
+        <div class="form-row"><label>Client *</label><select class="form-select"><option>Select client…</option><option>Acme Corp</option><option>TechStart Inc</option><option>Global Retail</option></select></div>
+        <div class="form-row"><label>Priority</label><select class="form-select"><option>Medium</option><option>Low</option><option>High</option><option>Critical</option></select></div>
+        <div class="form-row"><label>Category</label><select class="form-select"><option>Select…</option><option>Network/VPN</option><option>Hardware</option><option>Software</option><option>Email</option><option>Accounts</option><option>Security</option></select></div>
+        <div class="form-row"><label>Assign to</label><select class="form-select"><option>Auto-assign</option><option>James Davis</option><option>Mia Kim</option><option>Ryan Lee</option><option>Aisha Patel</option></select></div>
+      </div>
+      <div class="form-row"><label>Description</label><textarea class="form-textarea" placeholder="Describe the issue in detail…"></textarea></div>
+      <div class="form-row"><label>Attachments</label><div style="border:1px dashed var(--border2);border-radius:8px;padding:16px;text-align:center;color:var(--muted);font-size:13px;cursor:pointer">📎 Drop files here or click to upload</div></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('new-ticket-modal')">Cancel</button><button class="btn btn-primary">Create Ticket</button></div>
+  </div>
+</div>
+
+<!-- New Article Modal -->
+<div class="modal-overlay" id="new-article-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">New KB Article</div><div class="modal-close" onclick="closeModal('new-article-modal')">✕</div></div>
+    <div class="modal-body">
+      <div class="form-row"><label>Title *</label><input class="form-input" placeholder="Article title…"/></div>
+      <div class="form-grid">
+        <div class="form-row"><label>Category</label><select class="form-select"><option>Networking</option><option>Security</option><option>Software</option><option>Hardware</option><option>Email</option><option>Accounts</option></select></div>
+        <div class="form-row"><label>Visibility</label><select class="form-select"><option>Internal (agents only)</option><option>Public (all users)</option></select></div>
+      </div>
+      <div class="form-row"><label>Content</label><textarea class="form-textarea" style="min-height:120px" placeholder="Write the article content…"></textarea></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('new-article-modal')">Cancel</button><button class="btn btn-primary">Publish Article</button></div>
+  </div>
+</div>
+
+<!-- Add Client Modal -->
+<div class="modal-overlay" id="add-client-modal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add New Client</div><div class="modal-close" onclick="closeModal('add-client-modal')">✕</div></div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-row"><label>Company Name *</label><input class="form-input" placeholder="e.g. Acme Corp"/></div>
+        <div class="form-row"><label>Industry</label><select class="form-select"><option>Technology</option><option>Finance</option><option>Healthcare</option><option>Retail</option><option>Education</option><option>Legal</option></select></div>
+        <div class="form-row"><label>Primary Contact</label><input class="form-input" placeholder="Name"/></div>
+        <div class="form-row"><label>Contact Email</label><input class="form-input" placeholder="email@company.com"/></div>
+        <div class="form-row"><label>Phone</label><input class="form-input" placeholder="+27 11 000 0000"/></div>
+        <div class="form-row"><label>SLA Policy</label><select class="form-select"><option>Standard</option><option>Priority</option><option>Enterprise 24/7</option></select></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal('add-client-modal')">Cancel</button><button class="btn btn-primary">Add Client</button></div>
+  </div>
+</div>
+
+<style>
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
+</style>
+
+<script>
+const pageTitles = {
+  dashboard:'Command Center', tickets:'Tickets', 'my-queue':'My Queue',
+  'live-chat':'Live Chat', 'knowledge-base':'Knowledge Base',
+  'ai-assist':'AI Assist', assets:'Asset Management', security:'Security',
+  patch:'Patch Management', monitoring:'Monitoring', automation:'Automation',
+  clients:'Clients', departments:'Departments', alerts:'Alerts',
+  analytics:'Analytics', reports:'Reports', settings:'Settings'
+};
+
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+  const nav = document.querySelector(`[data-page="${page}"]`);
+  if (nav) nav.classList.add('active');
+  document.getElementById('page-title').textContent = pageTitles[page] || page;
+  closeTicketDetail();
+}
+
+document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+  item.addEventListener('click', () => navigate(item.dataset.page));
+});
+
+// Tab switching
+document.querySelectorAll('.tab-strip').forEach(strip => {
+  strip.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      strip.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+});
+
+// Ticket detail panel
+function showTicketDetail(id) {
+  document.getElementById('ticket-detail').classList.add('open');
+}
+function closeTicketDetail() {
+  const p = document.getElementById('ticket-detail');
+  if (p) p.classList.remove('open');
+}
+
+// Modal
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+// Settings nav
+function switchSettings(el, section) {
+  document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Toggle switches
+document.querySelectorAll('.toggle').forEach(t => {
+  t.addEventListener('click', function() { this.classList.toggle('on'); });
+});
+
+// Spark bars in monitoring (already inlined via template literals)
+</script>
+</body>
+</html>
